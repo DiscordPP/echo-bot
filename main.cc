@@ -4,13 +4,16 @@
 #include <boost/asio.hpp>
 namespace asio = boost::asio;
 
-#include <discordpp/discordpp.hh>
+#include <discordpp/bot.hh>
 #include <discordpp/rest-curlpp.hh>
 #include <discordpp/websocket-websocketpp.hh>
 
 #include <lib/nlohmannjson/src/json.hpp>
 
 std::string readTokenFile(std::string tokenFilePath);
+
+using json = nlohmann::json;
+using aios_ptr = std::shared_ptr<asio::io_service>;
 
 int main() {
     std::cout << "Starting bot...\n\n";
@@ -34,11 +37,13 @@ int main() {
             std::make_shared<discordpp::WebsocketWebsocketPPModule>()
     );
 
-    std::shared_ptr<asio::io_service> asio_ios();
+    bot.addHandler("MESSAGE_CREATE", [](aios_ptr asio_ios, json msg){
+        std::cout << msg.dump(4) << '\n';
+    });
 
-    //add handlers to bot
-
-    bot.run(asio_ios());
+    aios_ptr asio_ios = std::make_shared<asio::io_service>();
+    bot.init(asio_ios);
+    asio_ios->run();
 
     return 0;
 }

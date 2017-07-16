@@ -37,8 +37,15 @@ int main() {
             std::make_shared<discordpp::WebsocketWebsocketPPModule>()
     );
 
-    bot.addHandler("MESSAGE_CREATE", [](aios_ptr asio_ios, json msg){
+    bot.addHandler("MESSAGE_CREATE", [](discordpp::Bot* bot, aios_ptr asio_ios, json msg){
         std::cout << msg.dump(4) << '\n';
+    });
+
+    bot.addHandler("PRESENCE_UPDATE", [](discordpp::Bot* bot, aios_ptr asio_ios, json jmessage) {
+        // ignore
+    });
+    bot.addHandler("TYPING_START", [](discordpp::Bot* bot, aios_ptr asio_ios, json jmessage) {
+        // ignore
     });
 
     aios_ptr asio_ios = std::make_shared<asio::io_service>();

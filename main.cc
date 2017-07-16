@@ -1,5 +1,9 @@
 #include <iostream>
+
 #include <boost/filesystem.hpp>
+#include <boost/asio.hpp>
+namespace asio = boost::asio;
+
 #include <discordpp/discordpp.hh>
 #include <discordpp/rest-curlpp.hh>
 #include <discordpp/websocket-websocketpp.hh>
@@ -30,7 +34,11 @@ int main() {
             std::make_shared<discordpp::WebsocketWebsocketPPModule>()
     );
 
+    std::shared_ptr<asio::io_service> asio_ios();
 
+    //add handlers to bot
+
+    bot.run(asio_ios());
 
     return 0;
 }

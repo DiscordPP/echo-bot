@@ -54,6 +54,7 @@ int main() {
                 content = content.substr(0, content.find(mentioncode)) + content.substr(content.find(mentioncode) + mentioncode.size());
             }
             bot->call(
+                    asio_ios,
                     "/channels/" + msg["d"]["channel_id"].get<std::string>() + "/messages",
                     {{"content", content}},
                     "POST"

@@ -41,7 +41,7 @@ int main() {
         //std::cout << bot->me_.dump(4) << '\n';
         //std::cout << msg.dump() << '\n';
         bool mentioned = false;
-        for(auto mention : msg["d"]["mentions"]) {
+        for(auto mention : msg["mentions"]) {
             if(mention["id"] == bot->me_["id"]){
                 mentioned = true;
                 break;
@@ -49,24 +49,27 @@ int main() {
         }
         if(mentioned){
             std::string mentioncode = "<@" + bot->me_["id"].get<std::string>() + ">";
-            std::string content = msg["d"]["content"];
+            std::string content = msg["content"];
             while(content.find(mentioncode) != std::string::npos) {
                 content = content.substr(0, content.find(mentioncode)) + content.substr(content.find(mentioncode) + mentioncode.size());
             }
             bot->call(
                     asio_ios,
-                    "/channels/" + msg["d"]["channel_id"].get<std::string>() + "/messages",
+                    "/channels/" + msg["channel_id"].get<std::string>() + "/messages",
                     {{"content", content}},
                     "POST"
             );
         }
+        return std::vector<json>();
     });
 
     bot.addHandler("PRESENCE_UPDATE", [](discordpp::Bot* bot, aios_ptr asio_ios, json jmessage) {
         // ignore
+        return std::vector<json>();
     });
     bot.addHandler("TYPING_START", [](discordpp::Bot* bot, aios_ptr asio_ios, json jmessage) {
         // ignore
+        return std::vector<json>();
     });
 
     aios_ptr asio_ios = std::make_shared<asio::io_service>();

@@ -50,6 +50,9 @@ int main() {
         if(mentioned){
             std::string mentioncode = "<@" + bot->me_["id"].get<std::string>() + ">";
             std::string content = msg["content"];
+            while(content.find(mentioncode + ' ') != std::string::npos) {
+                content = content.substr(0, content.find(mentioncode + ' ')) + content.substr(content.find(mentioncode + ' ') + (mentioncode + ' ').size());
+            }
             while(content.find(mentioncode) != std::string::npos) {
                 content = content.substr(0, content.find(mentioncode)) + content.substr(content.find(mentioncode) + mentioncode.size());
             }

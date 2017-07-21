@@ -62,11 +62,14 @@ int main() {
                     {{"content", content}},
                     "POST"
             );
-            /*bot->send(3, {
+            bot->send(3, {
                     {"game", {
                             {"name", "with " + msg["author"]["username"].get<std::string>()}
-                    }}
-            });*/
+                    }},
+                    {"status", "online"},
+                    {"afk", false},
+                    {"since", "null"}
+            });
         }
     });
 

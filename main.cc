@@ -62,17 +62,19 @@ int main() {
                     {{"content", content}},
                     "POST"
             );
+            /*bot->send(3, {
+                    {"game", {
+                            {"name", "with " + msg["author"]["username"].get<std::string>()}
+                    }}
+            });*/
         }
-        return std::vector<json>();
     });
 
     bot.addHandler("PRESENCE_UPDATE", [](discordpp::Bot* bot, aios_ptr asio_ios, json jmessage) {
         // ignore
-        return std::vector<json>();
     });
     bot.addHandler("TYPING_START", [](discordpp::Bot* bot, aios_ptr asio_ios, json jmessage) {
         // ignore
-        return std::vector<json>();
     });
 
     aios_ptr asio_ios = std::make_shared<asio::io_service>();

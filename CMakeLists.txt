@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 project(example_bot)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 add_subdirectory(lib/discordpp)
 add_subdirectory(lib/rest-curlpp)

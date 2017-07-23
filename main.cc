@@ -31,13 +31,16 @@ int main() {
         exit(1);
     }
 
+    aios_ptr aios = std::make_shared<asio::io_service>();
+
     discordpp::Bot bot(
+            aios,
             token,
-            std::make_shared<discordpp::RestCurlPPModule>(),
-            std::make_shared<discordpp::WebsocketWebsocketPPModule>()
+            std::make_shared<discordpp::RestCurlPPModule>(aios, token),
+            std::make_shared<discordpp::WebsocketWebsocketPPModule>(aios, token)
     );
 
-    bot.addHandler("MESSAGE_CREATE", [](discordpp::Bot* bot, aios_ptr asio_ios, json msg){
+    bot.addHandler("MESSAGE_CREATE", [](discordpp::Bot* bot, json msg){
         //std::cout << bot->me_.dump(4) << '\n';
         //std::cout << msg.dump() << '\n';
         bool mentioned = false;
@@ -57,7 +60,6 @@ int main() {
                 content = content.substr(0, content.find(mentioncode)) + content.substr(content.find(mentioncode) + mentioncode.size());
             }
             bot->call(
-                    asio_ios,
                     "/channels/" + msg["channel_id"].get<std::string>() + "/messages",
                     {{"content", content}},
                     "POST"
@@ -73,16 +75,14 @@ int main() {
         }
     });
 
-    bot.addHandler("PRESENCE_UPDATE", [](discordpp::Bot* bot, aios_ptr asio_ios, json jmessage) {
+    bot.addHandler("PRESENCE_UPDATE", [](discordpp::Bot*, json) {
         // ignore
     });
-    bot.addHandler("TYPING_START", [](discordpp::Bot* bot, aios_ptr asio_ios, json jmessage) {
+    bot.addHandler("TYPING_START", [](discordpp::Bot*, json) {
         // ignore
     });
 
-    aios_ptr asio_ios = std::make_shared<asio::io_service>();
-    bot.init(asio_ios);
-    asio_ios->run();
+    aios->run();
 
     return 0;
 }

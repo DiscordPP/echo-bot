@@ -17,7 +17,7 @@ INCLUDE_DIRECTORIES(
         ${discordpp_SOURCE_DIR}
         ${discordpp-rest-curlpp_SOURCE_DIR}
         ${discordpp-websocket-websocketpp_SOURCE_DIR}
-        ${nlohmann_json_include_dir}
+        ${json_SOURCE_DIR}
 )
 
 TARGET_LINK_LIBRARIES(

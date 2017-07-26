@@ -8,7 +8,8 @@ namespace asio = boost::asio;
 #include <discordpp/rest-curlpp.hh>
 #include <discordpp/websocket-websocketpp.hh>
 
-#include <lib/nlohmannjson/src/json.hpp>
+//#include <lib/nlohmannjson/src/json.hpp>
+//#include <nlohmann/json.hpp>
 
 std::string readTokenFile(std::string tokenFilePath);
 

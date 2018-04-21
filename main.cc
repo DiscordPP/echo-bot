@@ -68,7 +68,8 @@ int main() {
             );
             bot->send(3, {
                     {"game", {
-                            {"name", "with " + msg["author"]["username"].get<std::string>()}
+                        {"name", "with " + msg["author"]["username"].get<std::string>()},
+                        {"type", 0}
                     }},
                     {"status", "online"},
                     {"afk", false},

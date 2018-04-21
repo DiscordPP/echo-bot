@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 #include <boost/filesystem.hpp>
 #include <boost/asio.hpp>

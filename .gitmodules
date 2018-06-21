@@ -7,6 +7,3 @@
 [submodule "lib/rest-beast"]
 	path = lib/rest-beast
 	url = https://github.com/DiscordPP/rest-beast.git
-[submodule "lib/beast"]
-	path = lib/beast
-	url = https://github.com/boostorg/beast.git

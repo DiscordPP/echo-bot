@@ -7,6 +7,3 @@
 [submodule "lib/rest-beast"]
 	path = lib/rest-beast
 	url = https://github.com/DiscordPP/rest-beast.git
-[submodule "lib/dppext-asiomanager"]
-	path = lib/dppext-asiomanager
-	url = https://github.com/DiscordPP/DppExt-AsioManager.git

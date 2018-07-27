@@ -8,7 +8,6 @@ namespace asio = boost::asio;
 #include <discordpp/bot.hh>
 #include <discordpp/rest-beast.hh>
 #include <discordpp/websocket-beast.hh>
-#include <discordpp/asio-manager.hh>
 
 //#include <lib/nlohmannjson/src/json.hpp>
 //#include <nlohmann/json.hpp>
@@ -18,7 +17,7 @@ std::string readTokenFile(std::string tokenFilePath);
 //using aios_ptr = std::shared_ptr<asio::io_service>;
 using json = nlohmann::json;
 namespace dpp = discordpp;
-using DppBot = dpp::AsioManager<dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> > >;
+using DppBot = dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> >;
 
 int main() {
     std::cout << "Starting bot...\n\n";
@@ -36,7 +35,9 @@ int main() {
         exit(1);
     }
 
+    DppBot bot;//(6, token);
 
+    bot.run();
 
     /*aios_ptr aios = std::make_shared<asio::io_service>();
 

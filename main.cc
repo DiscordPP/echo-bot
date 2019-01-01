@@ -35,7 +35,10 @@ int main() {
         exit(1);
     }
 
-    DppBot bot;//(6, token);
+    DppBot bot;
+    auto aioc = std::make_shared<asio::io_context>();
+
+    bot.initBot(6, token, aioc);
 
     bot.run();
 

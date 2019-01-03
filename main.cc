@@ -86,8 +86,9 @@ int main() {
                     }
             }
     );
-    bot.handlers.insert({"GUILD_CREATE",[](json){}}); // Ignoring
-    bot.handlers.insert({"TYPING_START",[](json){}}); // Ignoring
+    bot.handlers.insert({"GUILD_CREATE",   [](json){}}); // Ignoring
+    bot.handlers.insert({"PRESENCE_UPDATE",[](json){}}); // Ignoring
+    bot.handlers.insert({"TYPING_START",   [](json){}}); // Ignoring
 
     auto aioc = std::make_shared<asio::io_context>();
 

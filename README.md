@@ -8,7 +8,7 @@
 ### Install Prerequisites
 #### Install Git
  * If you want to use Git in the command line, run `sudo apt install git`
- * If you'r less terminal-inclined, you can install a Git GUI wrapper. [There's a nice list here.](https://git-scm.com/downloads/guis/)
+ * If you're less terminal-inclined, you can install a Git GUI wrapper. [There's a nice list here.](https://git-scm.com/downloads/guis/)
     * I would personally recommend [GitKraken](https://www.gitkraken.com/). The free version has everyhting you need, (although their conflict resolver for Pro is nice,) and you can also get Pro free with [GitHub Education](https://education.github.com/)!
 #### <sup>AND</sup> Install C++
  1. Install a C++ compiler

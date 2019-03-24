@@ -1,4 +1,5 @@
 build/
+.floo
 
 # Prerequisites
 *.d

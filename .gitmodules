@@ -1,9 +1,9 @@
 [submodule "lib/discordpp"]
 	path = lib/discordpp
 	url = https://github.com/DiscordPP/discordpp.git
-[submodule "lib/websocket-websocketpp"]
-	path = lib/websocket-websocketpp
-	url = https://github.com/DiscordPP/websocket-websocketpp.git
-[submodule "lib/rest-curlpp"]
-	path = lib/rest-curlpp
-	url = https://github.com/DiscordPP/rest-curlpp.git
+[submodule "lib/websocket-beast"]
+	path = lib/websocket-beast
+	url = https://github.com/DiscordPP/websocket-beast.git
+[submodule "lib/rest-beast"]
+	path = lib/rest-beast
+	url = https://github.com/DiscordPP/rest-beast.git

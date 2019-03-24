@@ -61,4 +61,4 @@ Run `git clone --recursive https://github.com/discordpp/echo-bot.git` in your de
 
 ## Contributing
  * Echo is pretty simple and probably doesn't need much, but if you have a suggestion or spot an issue, make a pull request on Github!
- * Also, this repo needs better jokes.
+ * ~~Also, this repo needs better jokes.~~ This repo is a good enough joke.

@@ -53,11 +53,12 @@ Run `git clone --recursive https://github.com/discordpp/echo-bot.git` in your de
  1. Create a `build` directory (folder) with `mkdir build`
  2. Enter the folder with `cd build`
  3. Go back to your Application's 'bot' page from before, and copy the token. Run `echo Bot [token] > token.dat`, replacing the brackets and the word token
- 4. Build the bot with `cmake ../`
- 5. Run the bot with `./echo_bot`
+ 4. Build the makefiles with `cmake ../`
+ 5. Build the bot with `make`
+ 6. Run the bot with `./echo_bot`
     * You can change the executable name by modifying the `project` command in `CMakeLists.txt`
- 6. ???
- 7. Profit! Mention your bot in a scope it can read & write in, it should echo back your message.
+ 7. ???
+ 8. Profit! Mention your bot in a scope it can read & write in, it should echo back your message.
 
 ## Contributing
  * Echo is pretty simple and probably doesn't need much, but if you have a suggestion or spot an issue, make a pull request on Github!

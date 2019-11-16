@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 
-#include <boost/filesystem.hpp>
 #include <boost/asio.hpp>
 
 #include <discordpp/bot.hh>
@@ -13,7 +12,7 @@ using json = nlohmann::json;
 namespace dpp = discordpp;
 using DppBot = dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> >;
 
-std::string readTokenFile(const std::string &tokenFilePath);
+std::istream& safeGetline(std::istream& is, std::string& t);
 
 int main() {
     std::cout << "Starting bot...\n\n";
@@ -24,13 +23,16 @@ int main() {
      * If your bot is open source, make sure it's ignore by git in your .gitignore file.
     /*/
     std::string token;
-    if (boost::filesystem::exists("token.dat")) {
-        token = readTokenFile("token.dat");
-    } else {
-        std::cerr
-                << "CRITICAL: There is no valid way for Discord++ to obtain a token! Copy the example login.dat or token.dat to make one.\n";
-        exit(1);
-    }
+	{
+		std::ifstream tokenFile("token.dat");
+		if(!tokenFile){
+			std::cerr
+					<< "CRITICAL: There is no valid way for Echo Bot to obtain a token! Copy the example login.dat or token.dat to make one.\n";
+			exit(1);
+		}
+		safeGetline(tokenFile, token);
+		tokenFile.close();
+	}
 
     // Create Bot object
     DppBot bot;
@@ -109,21 +111,39 @@ int main() {
     return 0;
 }
 
-std::string readTokenFile(const std::string &tokenFilePath) {
-    std::ifstream tokenFile;
-    tokenFile.open(tokenFilePath);
+/**
+ * Source: https://stackoverflow.com/a/6089413/1526048
+**/
+std::istream& safeGetline(std::istream& is, std::string& t){
+	t.clear();
 
-    std::string token;
+	// The characters in the stream are read one-by-one using a std::streambuf.
+	// That is faster than reading them one-by-one using the std::istream.
+	// Code that uses streambuf this way must be guarded by a sentry object.
+	// The sentry object performs various tasks,
+	// such as thread synchronization and updating the stream state.
 
-    if (tokenFile.is_open()) {
-        std::getline(tokenFile, token);
-    } else {
-        std::cerr << "CRITICAL: There is no such file as " + tokenFilePath +
-                     "! Copy the example login.dat to make one.\n";
-        exit(1);
-    }
-    tokenFile.close();
-    std::cout << "Retrieved token.\n\n";
+	std::istream::sentry se(is, true);
+	std::streambuf* sb = is.rdbuf();
 
-    return token;
+	for(;;) {
+		int c = sb->sbumpc();
+		switch (c) {
+			case '\n':
+				return is;
+			case '\r':
+				if(sb->sgetc() == '\n'){
+					sb->sbumpc();
+				}
+				return is;
+			case std::streambuf::traits_type::eof():
+				// Also handle the case when the last line has no line ending
+				if(t.empty()){
+					is.setstate(std::ios::eofbit);
+				}
+				return is;
+			default:
+				t += (char)c;
+		}
+	}
 }

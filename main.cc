@@ -31,7 +31,7 @@ int main(){
 		std::ifstream tokenFile("token.dat");
 		if(!tokenFile){
 			std::cerr << "CRITICAL: "
-			          << "There is no valid way for Echo Bot to obtain a token! "
+			          << "There is no valid way for Echo to obtain a token! "
 			          << "Copy the example `token.eg.dat` as `token.dat` to make one.\n";
 			exit(1);
 		}

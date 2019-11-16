@@ -14,105 +14,119 @@ using DppBot = dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> >;
 
 std::istream& safeGetline(std::istream& is, std::string& t);
 
-int main() {
-    std::cout << "Starting bot...\n\n";
+int main(){
+	std::cout << "Howdy, and thanks for trying out Discord++!\n"
+	          << "Feel free to drop into the official server at https://discord.gg/0usP6xmT4sQ4kIDh if you have any questions.\n\n"
+	          << std::flush;
 
-    /*/
-     * Read token from token file.
-     * Tokens are required to communicate with Discord, and hardcoding tokens is a bad idea.
-     * If your bot is open source, make sure it's ignore by git in your .gitignore file.
-    /*/
-    std::string token;
+	std::cout << "Starting bot...\n\n";
+
+	/*/
+	 * Read token from token file.
+	 * Tokens are required to communicate with Discord, and hardcoding tokens is a bad idea.
+	 * If your bot is open source, make sure it's ignore by git in your .gitignore file.
+	/*/
+	std::string token;
 	{
 		std::ifstream tokenFile("token.dat");
 		if(!tokenFile){
-			std::cerr << "CRITICAL: There is no valid way for Echo Bot to obtain a token! Copy the example `token.eg.dat` as `token.dat` to make one.\n";
+			std::cerr << "CRITICAL: "
+			          << "There is no valid way for Echo Bot to obtain a token! "
+			          << "Copy the example `token.eg.dat` as `token.dat` to make one.\n";
 			exit(1);
 		}
 		safeGetline(tokenFile, token);
 		tokenFile.close();
 	}
 
-    // Create Bot object
-    DppBot bot;
+	// Create Bot object
+	DppBot bot;
 
-    /*/
-     * Create handler for the READY payload, this may be handled by the bot in the future.
-     * The `self` object contains all information about the 'bot' user.
-    /*/
-    json self;
-    bot.handlers.insert(
-            {
-                    "READY",
-                    [&bot, &self](json data) {
-                        self = data["user"];
-                    }
-            }
-    );
+	/*/
+	 * Create handler for the READY payload, this may be handled by the bot in the future.
+	 * The `self` object contains all information about the 'bot' user.
+	/*/
+	json self;
+	bot.handlers.insert(
+			{
+					"READY",
+					[&bot, &self](json data){
+						self = data["user"];
+					}
+			}
+	);
 
-    // Create handler for the MESSAGE_CREATE payload, this recieves all messages sent that the bot can see.
-    bot.handlers.insert(
-            {
-                    "MESSAGE_CREATE",
-                    [&bot, &self](json msg) {
-                        // Scan through mentions in the message for self
-                        bool mentioned = false;
-                        for(const json &mention : msg["mentions"]){
-                            mentioned = mentioned or mention["id"] == self["id"];
-                        }
-                        if(mentioned){
-                            // Identify and remove mentions of self from the message
-                            std::string mentioncode = "<@" + self["id"].get<std::string>() + ">";
-                            std::string content = msg["content"];
-                            while(content.find(mentioncode + ' ') != std::string::npos) {
-                                content = content.substr(0, content.find(mentioncode + ' ')) + content.substr(content.find(mentioncode + ' ') + (mentioncode + ' ').size());
-                            }
-                            while(content.find(mentioncode) != std::string::npos) {
-                                content = content.substr(0, content.find(mentioncode)) + content.substr(content.find(mentioncode) + mentioncode.size());
-                            }
+	// Create handler for the MESSAGE_CREATE payload, this recieves all messages sent that the bot can see.
+	bot.handlers.insert(
+			{
+					"MESSAGE_CREATE",
+					[&bot, &self](json msg){
+						// Scan through mentions in the message for self
+						bool mentioned = false;
+						for(const json& mention : msg["mentions"]){
+							mentioned = mentioned or mention["id"] == self["id"];
+						}
+						if(mentioned){
+							// Identify and remove mentions of self from the message
+							std::string mentioncode = "<@" + self["id"].get<std::string>() + ">";
+							std::string content = msg["content"];
+							while(content.find(mentioncode + ' ') != std::string::npos){
+								content = content.substr(0, content.find(mentioncode + ' ')) +
+								          content.substr(content.find(mentioncode + ' ') + (mentioncode + ' ').size());
+							}
+							while(content.find(mentioncode) != std::string::npos){
+								content = content.substr(0, content.find(mentioncode)) +
+								          content.substr(content.find(mentioncode) + mentioncode.size());
+							}
 
-                            // Set status to Playing "with [author]"
-                            bot.call(
-                                    "POST",
-                                    "/channels/" + msg["channel_id"].get<std::string>() + "/messages",
-                                    {{"content", content}}
-                            );
+							// Set status to Playing "with [author]"
+							bot.call(
+									"POST",
+									"/channels/" + msg["channel_id"].get<std::string>() + "/messages",
+									{{"content", content}}
+							);
 
-                            // Echo the created message
-                            bot.send(3, {
-                                    {"game", {
-                                                     {"name", "with " + msg["author"]["username"].get<std::string>()},
-                                                     {"type", 0}
-                                             }},
-                                    {"status", "online"},
-                                    {"afk", false},
-                                    {"since", "null"}
-                            });
-                        }
-                    }
-            }
-    );
+							// Echo the created message
+							bot.send(
+									3, {
+											{
+													"game",   {
+															          {
+																	          "name", "with " +
+																	                  msg["author"]["username"].get<std::string>()
+															          },
+															          {"type", 0}
+													          }},
+											{       "status", "online"},
+											{       "afk",    false},
+											{       "since",  "null"}
+									}
+							);
+						}
+					}
+			}
+	);
 
-    // These handlers silence the GUILD_CREATE, PRESENCE_UPDATE, and TYPING_START payloads, as they're some that you see a lot.
-    bot.handlers.insert({"GUILD_CREATE",   [](json){}}); // Ignoring
-    bot.handlers.insert({"PRESENCE_UPDATE",[](json){}}); // Ignoring
-    bot.handlers.insert({"TYPING_START",   [](json){}}); // Ignoring
+	// These handlers silence the GUILD_CREATE, PRESENCE_UPDATE, and TYPING_START payloads, as they're some that you see a lot.
+	bot.handlers.insert({"GUILD_CREATE", [](json){}}); // Ignoring
+	bot.handlers.insert({"PRESENCE_UPDATE", [](json){}}); // Ignoring
+	bot.handlers.insert({"TYPING_START", [](json){}}); // Ignoring
 
-    // Create Asio context, this handles async stuff.
-    auto aioc = std::make_shared<asio::io_context>();
+	// Create Asio context, this handles async stuff.
+	auto aioc = std::make_shared<asio::io_context>();
 
-    // Set the bot up
-    bot.initBot(6, token, aioc);
+	// Set the bot up
+	bot.initBot(6, token, aioc);
 
-    // Run the bot!
-    bot.run();
+	// Run the bot!
+	bot.run();
 
-    return 0;
+	return 0;
 }
 
-/**
+/*/
  * Source: https://stackoverflow.com/a/6089413/1526048
-**/
+/*/
 std::istream& safeGetline(std::istream& is, std::string& t){
 	t.clear();
 
@@ -125,9 +139,9 @@ std::istream& safeGetline(std::istream& is, std::string& t){
 	std::istream::sentry se(is, true);
 	std::streambuf* sb = is.rdbuf();
 
-	for(;;) {
+	for(;;){
 		int c = sb->sbumpc();
-		switch (c) {
+		switch(c){
 			case '\n':
 				return is;
 			case '\r':

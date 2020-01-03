@@ -41,6 +41,8 @@ int main(){
 
 	// Create Bot object
 	DppBot bot;
+	// Don't complain about unhandled events
+	bot.debugUnhandled = false;
 
 	/*/
 	 * Create handler for the READY payload, this may be handled by the bot in the future.
@@ -79,14 +81,14 @@ int main(){
 								          content.substr(content.find(mentioncode) + mentioncode.size());
 							}
 
-							// Set status to Playing "with [author]"
+							// Echo the created message
 							bot.call(
 									"POST",
 									"/channels/" + msg["channel_id"].get<std::string>() + "/messages",
 									{{"content", content}}
 							);
 
-							// Echo the created message
+							// Set status to Playing "with [author]"
 							bot.send(
 									3, {
 											{
@@ -106,11 +108,6 @@ int main(){
 					}
 			}
 	);
-
-	// These handlers silence the GUILD_CREATE, PRESENCE_UPDATE, and TYPING_START payloads, as they're some that you see a lot.
-	bot.handlers.insert({"GUILD_CREATE", [](json){}}); // Ignoring
-	bot.handlers.insert({"PRESENCE_UPDATE", [](json){}}); // Ignoring
-	bot.handlers.insert({"TYPING_START", [](json){}}); // Ignoring
 
 	// Create Asio context, this handles async stuff.
 	auto aioc = std::make_shared<asio::io_context>();

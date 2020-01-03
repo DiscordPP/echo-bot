@@ -56,7 +56,7 @@ int main(){
 			}
 	);
 
-	// Create handler for the MESSAGE_CREATE payload, this recieves all messages sent that the bot can see.
+	// Create handler for the MESSAGE_CREATE payload, this receives all messages sent that the bot can see.
 	bot.handlers.insert(
 			{
 					"MESSAGE_CREATE",

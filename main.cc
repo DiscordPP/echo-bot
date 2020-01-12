@@ -13,6 +13,8 @@ namespace dpp = discordpp;
 using DppBot = dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> >;
 
 std::istream& safeGetline(std::istream& is, std::string& t);
+void filter(std::string& target, const std::string& pattern);
+
 
 int main(){
 	std::cout << "Howdy, and thanks for trying out Discord++!\n"
@@ -69,13 +71,16 @@ int main(){
 							mentioned = mentioned or mention["id"] == self["id"];
 						}
 						if(mentioned){
+							std::cerr << msg["content"] << std::endl;
 							// Identify and remove mentions of self from the message
-							std::string mentioncode = "<@" + self["id"].get<std::string>() + ">";
 							std::string content = msg["content"];
-							while(content.find(mentioncode + ' ') != std::string::npos){
-								content = content.substr(0, content.find(mentioncode + ' ')) +
-								          content.substr(content.find(mentioncode + ' ') + (mentioncode + ' ').size());
-							}
+							std::string mentioncode = "<@" + self["id"].get<std::string>() + ">";
+							std::string nickedcode = "<@!" + self["id"].get<std::string>() + ">";
+							filter(content, mentioncode + ' ');
+							filter(content, nickedcode + ' ');
+							filter(content, mentioncode);
+							filter(content, nickedcode);
+
 							while(content.find(mentioncode) != std::string::npos){
 								content = content.substr(0, content.find(mentioncode)) +
 								          content.substr(content.find(mentioncode) + mentioncode.size());
@@ -155,5 +160,12 @@ std::istream& safeGetline(std::istream& is, std::string& t){
 			default:
 				t += (char)c;
 		}
+	}
+}
+
+void filter(std::string& target, const std::string& pattern){
+	while(target.find(pattern) != std::string::npos){
+		target = target.substr(0, target.find(pattern)) +
+				target.substr(target.find(pattern) + (pattern).size());
 	}
 }

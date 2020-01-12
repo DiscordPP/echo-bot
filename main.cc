@@ -71,7 +71,6 @@ int main(){
 							mentioned = mentioned or mention["id"] == self["id"];
 						}
 						if(mentioned){
-							std::cerr << msg["content"] << std::endl;
 							// Identify and remove mentions of self from the message
 							std::string content = msg["content"];
 							std::string mentioncode = "<@" + self["id"].get<std::string>() + ">";

@@ -16,8 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-      with: 
-        submodules: true
+        
+    - name: Checkout submodules
+      uses: textbook/git-checkout-submodule-action@2.0.0
 
     - name: Dependencies
       run: sudo apt install build-essential libboost-all-dev libssl-dev libcrypto++-dev libcurl4-openssl-dev

@@ -52,9 +52,14 @@ jobs:
       run: ctest -C $BUILD_TYPE
 
     - name: Directory Structure
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: pwd; ls-R
+
+    - name: Directory Structure
       # working-directory: ${{runner.workspace}}/build
       shell: bash
-      run: ls -R
+      run: pwd; ls -R
       
     - uses: actions/upload-artifact@v1
       with:

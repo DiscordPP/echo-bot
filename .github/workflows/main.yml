@@ -21,7 +21,7 @@ jobs:
       uses: textbook/git-checkout-submodule-action@2.0.0
 
     - name: Dependencies
-      run: sudo apt install build-essential libboost-all-dev libssl-dev libcrypto++-dev libcurl4-openssl-dev
+      run: sudo apt install build-essential libssl-dev libcrypto++-dev libcurl4-openssl-dev
 
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
@@ -50,6 +50,11 @@ jobs:
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C $BUILD_TYPE
+
+    - name: Directory Structure
+      # working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: ls -R
       
     - uses: actions/upload-artifact@v1
       with:

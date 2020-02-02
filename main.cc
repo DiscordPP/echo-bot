@@ -12,8 +12,9 @@ using json = nlohmann::json;
 namespace dpp = discordpp;
 using DppBot = dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> >;
 
-std::istream& safeGetline(std::istream& is, std::string& t);
-void filter(std::string& target, const std::string& pattern);
+std::istream &safeGetline(std::istream &is, std::string &t);
+
+void filter(std::string &target, const std::string &pattern);
 
 
 int main(){
@@ -67,7 +68,7 @@ int main(){
 					[&bot, &self](json msg){
 						// Scan through mentions in the message for self
 						bool mentioned = false;
-						for(const json& mention : msg["mentions"]){
+						for(const json &mention : msg["mentions"]){
 							mentioned = mentioned or mention["id"] == self["id"];
 						}
 						if(mentioned){
@@ -128,7 +129,7 @@ int main(){
 /*/
  * Source: https://stackoverflow.com/a/6089413/1526048
 /*/
-std::istream& safeGetline(std::istream& is, std::string& t){
+std::istream &safeGetline(std::istream &is, std::string &t){
 	t.clear();
 
 	// The characters in the stream are read one-by-one using a std::streambuf.
@@ -138,7 +139,7 @@ std::istream& safeGetline(std::istream& is, std::string& t){
 	// such as thread synchronization and updating the stream state.
 
 	std::istream::sentry se(is, true);
-	std::streambuf* sb = is.rdbuf();
+	std::streambuf *sb = is.rdbuf();
 
 	for(;;){
 		int c = sb->sbumpc();
@@ -162,9 +163,9 @@ std::istream& safeGetline(std::istream& is, std::string& t){
 	}
 }
 
-void filter(std::string& target, const std::string& pattern){
+void filter(std::string &target, const std::string &pattern){
 	while(target.find(pattern) != std::string::npos){
 		target = target.substr(0, target.find(pattern)) +
-				target.substr(target.find(pattern) + (pattern).size());
+		         target.substr(target.find(pattern) + (pattern).size());
 	}
 }

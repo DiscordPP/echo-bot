@@ -4,13 +4,14 @@
 #include <boost/asio.hpp>
 
 #include <discordpp/bot.hh>
+#include <discordpp/plugin-overload.hh>
 #include <discordpp/rest-beast.hh>
 #include <discordpp/websocket-beast.hh>
 
 namespace asio = boost::asio;
 using json = nlohmann::json;
 namespace dpp = discordpp;
-using DppBot = dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> >;
+using DppBot = dpp::PluginOverload<dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> > >;
 
 std::istream &safeGetline(std::istream &is, std::string &t);
 
@@ -43,16 +44,16 @@ int main(){
 	}
 
 	// Create Bot object
-	DppBot bot;
+	auto bot = std::make_shared<DppBot>();
 	// Don't complain about unhandled events
-	bot.debugUnhandled = false;
+	bot->debugUnhandled = false;
 
 	/*/
 	 * Create handler for the READY payload, this may be handled by the bot in the future.
 	 * The `self` object contains all information about the 'bot' user.
 	/*/
 	json self;
-	bot.handlers.insert(
+	bot->handlers.insert(
 			{
 					"READY",
 					[&bot, &self](json data){
@@ -62,7 +63,7 @@ int main(){
 	);
 
 	// Create handler for the MESSAGE_CREATE payload, this receives all messages sent that the bot can see.
-	bot.handlers.insert(
+	bot->handlers.insert(
 			{
 					"MESSAGE_CREATE",
 					[&bot, &self](json msg){
@@ -87,14 +88,14 @@ int main(){
 							}
 
 							// Echo the created message
-							bot.call(
+							bot->ccall(
 									"POST",
 									"/channels/" + msg["channel_id"].get<std::string>() + "/messages",
-									{{"content", content}}
+									json({{"content", content}})
 							);
 
 							// Set status to Playing "with [author]"
-							bot.send(
+							bot->csend(
 									3, {
 											{
 													"game",   {
@@ -118,10 +119,10 @@ int main(){
 	auto aioc = std::make_shared<asio::io_context>();
 
 	// Set the bot up
-	bot.initBot(6, token, aioc);
+	bot->initBot(6, token, aioc);
 
 	// Run the bot!
-	bot.run();
+	bot->run();
 
 	return 0;
 }

@@ -88,14 +88,14 @@ int main(){
 							}
 
 							// Echo the created message
-							bot->ccall(
+							bot->call(
 									"POST",
 									"/channels/" + msg["channel_id"].get<std::string>() + "/messages",
 									json({{"content", content}})
 							);
 
 							// Set status to Playing "with [author]"
-							bot->csend(
+							bot->send(
 									3, {
 											{
 													"game",   {

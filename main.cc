@@ -4,16 +4,18 @@
 #include <boost/asio.hpp>
 
 #include <discordpp/bot.hh>
+#include <discordpp/plugin-overload.hh>
 #include <discordpp/rest-beast.hh>
 #include <discordpp/websocket-beast.hh>
 
 namespace asio = boost::asio;
 using json = nlohmann::json;
 namespace dpp = discordpp;
-using DppBot = dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> >;
+using DppBot = dpp::PluginOverload<dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> > >;
 
-std::istream& safeGetline(std::istream& is, std::string& t);
-void filter(std::string& target, const std::string& pattern);
+std::istream &safeGetline(std::istream &is, std::string &t);
+
+void filter(std::string &target, const std::string &pattern);
 
 
 int main(){
@@ -42,16 +44,16 @@ int main(){
 	}
 
 	// Create Bot object
-	DppBot bot;
+	auto bot = std::make_shared<DppBot>();
 	// Don't complain about unhandled events
-	bot.debugUnhandled = false;
+	bot->debugUnhandled = false;
 
 	/*/
 	 * Create handler for the READY payload, this may be handled by the bot in the future.
 	 * The `self` object contains all information about the 'bot' user.
 	/*/
 	json self;
-	bot.handlers.insert(
+	bot->handlers.insert(
 			{
 					"READY",
 					[&bot, &self](json data){
@@ -61,13 +63,13 @@ int main(){
 	);
 
 	// Create handler for the MESSAGE_CREATE payload, this receives all messages sent that the bot can see.
-	bot.handlers.insert(
+	bot->handlers.insert(
 			{
 					"MESSAGE_CREATE",
 					[&bot, &self](json msg){
 						// Scan through mentions in the message for self
 						bool mentioned = false;
-						for(const json& mention : msg["mentions"]){
+						for(const json &mention : msg["mentions"]){
 							mentioned = mentioned or mention["id"] == self["id"];
 						}
 						if(mentioned){
@@ -86,14 +88,14 @@ int main(){
 							}
 
 							// Echo the created message
-							bot.call(
+							bot->call(
 									"POST",
 									"/channels/" + msg["channel_id"].get<std::string>() + "/messages",
-									{{"content", content}}
+									json({{"content", content}})
 							);
 
 							// Set status to Playing "with [author]"
-							bot.send(
+							bot->send(
 									3, {
 											{
 													"game",   {
@@ -117,10 +119,10 @@ int main(){
 	auto aioc = std::make_shared<asio::io_context>();
 
 	// Set the bot up
-	bot.initBot(6, token, aioc);
+	bot->initBot(6, token, aioc);
 
 	// Run the bot!
-	bot.run();
+	bot->run();
 
 	return 0;
 }
@@ -128,7 +130,7 @@ int main(){
 /*/
  * Source: https://stackoverflow.com/a/6089413/1526048
 /*/
-std::istream& safeGetline(std::istream& is, std::string& t){
+std::istream &safeGetline(std::istream &is, std::string &t){
 	t.clear();
 
 	// The characters in the stream are read one-by-one using a std::streambuf.
@@ -138,7 +140,7 @@ std::istream& safeGetline(std::istream& is, std::string& t){
 	// such as thread synchronization and updating the stream state.
 
 	std::istream::sentry se(is, true);
-	std::streambuf* sb = is.rdbuf();
+	std::streambuf *sb = is.rdbuf();
 
 	for(;;){
 		int c = sb->sbumpc();
@@ -162,9 +164,9 @@ std::istream& safeGetline(std::istream& is, std::string& t){
 	}
 }
 
-void filter(std::string& target, const std::string& pattern){
+void filter(std::string &target, const std::string &pattern){
 	while(target.find(pattern) != std::string::npos){
 		target = target.substr(0, target.find(pattern)) +
-				target.substr(target.find(pattern) + (pattern).size());
+		         target.substr(target.find(pattern) + (pattern).size());
 	}
 }

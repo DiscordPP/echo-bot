@@ -7,3 +7,6 @@
 [submodule "lib/rest-beast"]
 	path = lib/rest-beast
 	url = https://github.com/DiscordPP/rest-beast.git
+[submodule "lib/plugin-overload"]
+	path = lib/plugin-overload
+	url = git@github.com:DiscordPP/plugin-overload.git

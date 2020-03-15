@@ -7,11 +7,12 @@
 #include <discordpp/plugin-overload.hh>
 #include <discordpp/rest-beast.hh>
 #include <discordpp/websocket-beast.hh>
+#include <discordpp/plugin-responder.hh>
 
 namespace asio = boost::asio;
 using json = nlohmann::json;
 namespace dpp = discordpp;
-using DppBot = dpp::PluginOverload<dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> > >;
+using DppBot = dpp::PluginResponder<dpp::PluginOverload<dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> > > >;
 
 std::istream &safeGetline(std::istream &is, std::string &t);
 
@@ -61,6 +62,10 @@ int main(){
 					}
 			}
 	);
+
+	bot->prefix = "~";
+
+	bot->respond("help", "Mention me and I'll echo your message back!");
 
 	// Create handler for the MESSAGE_CREATE payload, this receives all messages sent that the bot can see.
 	bot->handlers.insert(

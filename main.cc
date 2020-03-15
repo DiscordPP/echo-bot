@@ -67,6 +67,22 @@ int main(){
 
 	bot->respond("help", "Mention me and I'll echo your message back!");
 
+	bot->respond(
+			"about", [&bot](json msg){
+				std::ostringstream content;
+				content << "Sure thing, "
+				        << (msg["member"]["nick"].is_null() ? msg["author"]["username"].get<std::string>() : msg["member"]["nick"].get<std::string>())
+				        << "!\n"
+				        << "I'm a simple bot meant to demonstrate the Discord++ library.\n"
+				        << "You can learn more about Discord++ at https://discord.gg/0usP6xmT4sQ4kIDh";
+				bot->call(
+						"POST",
+						"/channels/" + msg["channel_id"].get<std::string>() + "/messages",
+						json({{"content", content.str()}})
+				);
+			}
+	);
+
 	// Create handler for the MESSAGE_CREATE payload, this receives all messages sent that the bot can see.
 	bot->handlers.insert(
 			{
@@ -105,11 +121,15 @@ int main(){
 											{
 													"game",   {
 															          {
-																	          "name", "with " +
-																	                  msg["author"]["username"].get<std::string>()
+																	          "name", "with " + (
+																	          msg["member"]["nick"].is_null()
+																	          ? msg["author"]["username"].get<std::string>()
+																	          : msg["member"]["nick"].get<std::string>()
+															          )
 															          },
 															          {"type", 0}
-													          }},
+													          }
+											},
 											{       "status", "online"},
 											{       "afk",    false},
 											{       "since",  "null"}

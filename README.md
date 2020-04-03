@@ -28,7 +28,7 @@
  * Click on your new 'Settings' tab, and rename your new repo
  
 #### Clone the Code
-Run `git clone --recursive https://github.com/discordpp/echo-bot.git` in your desired directory. If you made a fork, replace `discordpp` and `echo-bot` ass applicable.
+Run `git clone --recursive https://github.com/discordpp/echo-bot.git` in your desired directory. If you made a fork, replace `discordpp` and `echo-bot` as applicable.
 
 ### Register a Bot
  1. Go to Discord's [Developer Portal 'Application' page](https://discordapp.com/developers/applications/), it will prompt you to sign in <sup>By the way, do you have 2FA enabled? It's a really good idea, especially with bots on your account</sup>

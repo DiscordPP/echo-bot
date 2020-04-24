@@ -1,3 +1,5 @@
+![CMake](https://github.com/DiscordPP/echo-bot/workflows/CMake/badge.svg)
+
 # Discord++ example bot, Echo<sup>Echo<sup>Echo</sup></sup>
 
 ## Community & Support <sup>Some incredibly nice people here!</sup>

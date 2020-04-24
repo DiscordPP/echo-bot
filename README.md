@@ -1,4 +1,4 @@
-![CMake](https://github.com/DiscordPP/echo-bot/workflows/CMake/badge.svg)
+[![CMake](https://github.com/DiscordPP/echo-bot/workflows/CMake/badge.svg)](https://github.com/DiscordPP/echo-bot/actions?query=workflow%3ACMake)
 
 # Discord++ example bot, Echo<sup>Echo<sup>Echo</sup></sup>
 

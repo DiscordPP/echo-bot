@@ -14,7 +14,7 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 
-find_package(Boost REQUIRED system)
+find_package(Boost 1.72.0 REQUIRED system)
 find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
 

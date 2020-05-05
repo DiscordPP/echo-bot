@@ -21,7 +21,7 @@
  * Debian-based (Ubuntu) `sudo apt install build-essential libboost-all-dev libssl-dev libcrypto++-dev libcurl4-openssl-dev`
  * Fedora/RHEL-based `sudo dnf install openssl-devel boost-devel cryptopp-devel cryptopp`
 #### <sup>OR</sup> Install Everything at Once
-`sup apt install git clang cmake build-essential libboost-all-dev libssl-dev libcrypto++-dev libcurl4-openssl-dev`
+`sudo apt install git clang cmake build-essential libboost-all-dev libssl-dev libcrypto++-dev libcurl4-openssl-dev`
 
 ### Set Up Repository
 #### Fork Echo <sup>Optional, I guess</sup>

@@ -18,7 +18,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2.1.0
       with:
-        submodules: true 
+        submodules: recursive 
 
     - name: Dependencies
       run: sudo apt install build-essential libssl-dev libcrypto++-dev libcurl4-openssl-dev

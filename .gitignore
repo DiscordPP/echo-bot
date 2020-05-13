@@ -45,6 +45,7 @@ token.dat
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
+.vscode/
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/

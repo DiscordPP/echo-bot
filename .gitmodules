@@ -13,6 +13,3 @@
 [submodule "lib/plugin-responder"]
 	path = lib/plugin-responder
 	url = https://github.com/DiscordPP/plugin-responder.git
-[submodule "lib/plugin-reconnect"]
-	path = lib/plugin-reconnect
-	url = https://github.com/DiscordPP/plugin-reconnect.git

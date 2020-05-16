@@ -1,5 +1,5 @@
 # Use -e ECHO_BOT_TOKEN="Bot exampletoken" as an environment variable when running
-FROM ubuntu:20.04 AS setup
+FROM ubuntu:20.04 AS build
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
     libboost-all-dev \
@@ -9,8 +9,6 @@ RUN apt update && apt install -y \
     libcrypto++-dev \
     libcurl4-openssl-dev \
 && rm -rf /var/lib/apt/lists/*
-
-FROM setup AS build
 WORKDIR /echo-bot
 COPY . .
 RUN mkdir build && cd build && cmake .. && make

@@ -1,9 +1,22 @@
 # Use -e ECHO_BOT_TOKEN="Bot exampletoken" as an environment variable when running
-FROM lballabio/boost:1.73.0-focal
+FROM ubuntu:20.04 AS setup
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt update && apt install -y git cmake build-essential libssl-dev libcrypto++-dev libcurl4-openssl-dev
+RUN apt update && apt install -y \
+    libboost-all-dev \
+    cmake \
+    build-essential \
+    libssl-dev \
+    libcrypto++-dev \
+    libcurl4-openssl-dev \
+&& rm -rf /var/lib/apt/lists/*
+
+FROM setup AS build
 WORKDIR /echo-bot
 COPY . .
-RUN git submodule update --init --recursive
 RUN mkdir build && cd build && cmake .. && make
-CMD ["./build/echo_bot"]
+
+FROM alpine:latest
+RUN apk --no-cache add libgcc libstdc++ libc6-compat
+WORKDIR /echo-bot
+COPY --from=build /echo-bot/build/echo_bot .
+CMD ["./echo_bot"]

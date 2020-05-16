@@ -54,7 +54,7 @@ Run `git clone --recursive https://github.com/discordpp/echo-bot.git` in your de
 ### Build your Bot
  1. Create a `build` directory (folder) with `mkdir build`
  2. Enter the folder with `cd build`
- 3. Go back to your Application's 'bot' page from before, and copy the token. Run `echo Bot [token] > token.dat`, replacing the brackets and the word token
+ 3. Go back to your Application's 'bot' page from before, and copy the token. Run `echo Bot [token] > token.dat`, replacing `[token]` with your bot's token.  Alternatively, you can set the `ECHO_BOT_TOKEN` environment variable to `Bot [token]`.
  4. Build the makefiles with `cmake ../`
  5. Build the bot with `make`
  6. Run the bot with `./echo_bot`

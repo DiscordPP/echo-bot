@@ -28,10 +28,10 @@ int main(){
 	std::cout << "Starting bot...\n\n";
 
 	std::string token = getToken();
-	if(token == "") {
+	if(token.empty()) {
 		std::cerr << "CRITICAL: "
 						<< "There is no valid way for Echo to obtain a token! Use one of the following ways:" << std::endl
-						<< "(1) Fill the ECHO_BOT_TOKEN environment variable with the token (e.g. 'Bot 123456abcdef')." << std::endl
+						<< "(1) Fill the BOT_TOKEN environment variable with the token (e.g. 'Bot 123456abcdef')." << std::endl
 						<< "(2) Copy the example `token.eg.dat` as `token.dat` and write your own token to it.\n";
 			exit(1);
 	}
@@ -148,9 +148,9 @@ std::string getToken() {
 	std::string token;
 	
 		/*
-			First attempt to read the token from the ECHO_BOT_TOKEN environment variable.
+			First attempt to read the token from the BOT_TOKEN environment variable.
 		*/
-	char const* env = std::getenv("ECHO_BOT_TOKEN");
+	char const* env = std::getenv("BOT_TOKEN");
 	if(env != nullptr) {
 		token = (std::string) env;
 	} else {

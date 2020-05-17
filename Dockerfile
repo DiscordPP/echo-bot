@@ -6,8 +6,6 @@ RUN apt update && apt install -y \
     cmake \
     build-essential \
     libssl-dev \
-    libcrypto++-dev \
-    libcurl4-openssl-dev \
 && rm -rf /var/lib/apt/lists/*
 WORKDIR /echo-bot
 COPY . .

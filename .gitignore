@@ -45,7 +45,6 @@ token.dat
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
-.vscode/
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
@@ -96,3 +95,19 @@ fabric.properties
 .idea/
 
 # End of https://www.gitignore.io/api/jetbrains+all
+
+# Created by https://www.gitignore.io/api/visualstudiocode
+# Edit at https://www.gitignore.io/?templates=visualstudiocode
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+# End of https://www.gitignore.io/api/visualstudiocode

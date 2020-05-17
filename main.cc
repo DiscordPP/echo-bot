@@ -146,13 +146,13 @@ int main(){
 
 std::string getToken() {
 	std::string token;
-	
+
 		/*
 			First attempt to read the token from the BOT_TOKEN environment variable.
 		*/
 	char const* env = std::getenv("BOT_TOKEN");
 	if(env != nullptr) {
-		token = (std::string) env;
+		token = std::string(env);
 	} else {
 		/*/
 		 * Read token from token file.

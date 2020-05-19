@@ -8,29 +8,29 @@
 ## How to Get Started <sup>Let's get it sta-arted! Let's get it started in here!</sup>
 
 ### Install Prerequisites
-#### Install Git
+#### <sup>AND</sup>Install Git
  * If you want to use Git in the command line, run `sudo apt install git` on Ubuntu, on Windows you can download [Git for Windows](https://git-scm.com/) or use `choco install git` if you have Chocolatey installed.
  * If you're less terminal-inclined, you can install a Git GUI wrapper. [There's a nice list here.](https://git-scm.com/downloads/guis/)
     * I would personally recommend [GitKraken](https://www.gitkraken.com/). The free version has everyhting you need, (although their conflict resolver for Pro is nice,) and you can also get Pro free with [GitHub Education](https://education.github.com/)!
-#### Install CMake
+#### <sup>AND</sup>Install CMake
  * Debian-based (Ubuntu) run `sudo apt install cmake`
  * Fedora/RHEL-based `sudo dnf install cmake`
  * Windows Download [CMake](https://cmake.org/download/) or run `choco install cmake` if you have Chocolatey installed.
-#### Install vcpkg
- * Vcpkg is a cross platform library manager, you can install it by reading the instructions on this [page](https://github.com/microsoft/vcpkg)
- * This program is required to build echo-bot under Windows.
 #### <sup>AND</sup> Install C++
  1. Install a C++ compiler
     * the typical standard on Linux is `gcc`, you can install it on Ubuntu with `sudo apt install gcc`
     * `clang` is an alternative that I feel has better error statements, you can install it on Ubuntu with `sudo apt install clang`
     * The typical compiler on Windows is [Microsoft Visual C++](https://www.visualstudio.com/)
-    * [MinGW](https://www.msys2.org/) or [Cygwin](https://www.cygwin.com/) are valid alternatives if you like GCC running on Windows, oh there's also [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) as well ^^.
+    * [MinGW](https://www.msys2.org/) or [Cygwin](https://www.cygwin.com/) are valid alternatives if you like GCC running on Windows, there's also [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) which allows  you to run a Linux based distribution under Windows.
+#### <sup>AND OPTIONALLY</sup>Install vcpkg
+ * Vcpkg is a cross platform library manager, you can install it by reading the instructions on this [page](https://github.com/microsoft/vcpkg)
+ * **This program is required for building Echo under Windows.**
 #### <sup>AND</sup> Install Libraries
  * Debian-based (Ubuntu) `sudo apt install build-essential libboost-all-dev libssl-dev`
  * Fedora/RHEL-based `sudo dnf install openssl-devel boost-devel`
  * Vcpkg `vcpkg install boost-system boost-beast openssl`
 #### <sup>OR</sup> Install Everything at Once
- * Debian-based `sudo apt install git clang cmake build-essential libboost-all-dev libssl-dev`
+ * Debian-based (Ubuntu) `sudo apt install git clang cmake build-essential libboost-all-dev libssl-dev`
 
 ### Set Up Repository
 #### Fork Echo <sup>Optional, I guess</sup>
@@ -40,7 +40,7 @@
  
 #### Clone the Code
 Run `git clone --recursive https://github.com/discordpp/echo-bot.git` in your desired directory.
-If you made a fork, replace `discordpp` and `echo-bot` as applicable.
+If you made a fork, replace `echo-bot` as applicable.
 
 ### Register a Bot
  1. Go to Discord's [Developer Portal 'Application' page](https://discordapp.com/developers/applications/), it will prompt you to sign in <sup>By the way, do you have 2FA enabled? It's a really good idea, especially with bots on your account</sup>
@@ -67,7 +67,7 @@ If you made a fork, replace `discordpp` and `echo-bot` as applicable.
  3. Go back to your Application's 'bot' page from before, and copy the token. Run `echo Bot [token] > token.dat`, replacing the brackets and the word token
  4. Build the makefiles with `cmake ../`
      * If you are using vcpkg then run `cmake -DCMAKE_TOOLCHAIN_FILE="your vcpkg.cmake folder" ../`
- 5. Build the bot with `make` (if you are using Visual Studio just open `echo_bot.sln` and build from there)
+ 5. Build the bot with `make` (if you are using Visual Studio open `echo_bot.sln` and build from there)
  6. Run the bot with `./echo_bot`
     * You can change the executable name by modifying the `project` command in `CMakeLists.txt`
  7. ???

@@ -13,3 +13,6 @@
 [submodule "lib/plugin-responder"]
 	path = lib/plugin-responder
 	url = https://github.com/DiscordPP/plugin-responder.git
+[submodule "lib/plugin-ratelimit"]
+	path = lib/plugin-ratelimit
+	url = https://github.com/DiscordPP/plugin-ratelimit.git

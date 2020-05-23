@@ -14,6 +14,7 @@ using json = nlohmann::json;
 namespace dpp = discordpp;
 using DppBot = dpp::PluginResponder<dpp::PluginOverload<dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> > > >;
 
+std::string getToken();
 std::istream &safeGetline(std::istream &is, std::string &t);
 
 void filter(std::string &target, const std::string &pattern);
@@ -26,22 +27,13 @@ int main(){
 
 	std::cout << "Starting bot...\n\n";
 
-	/*/
-	 * Read token from token file.
-	 * Tokens are required to communicate with Discord, and hardcoding tokens is a bad idea.
-	 * If your bot is open source, make sure it's ignore by git in your .gitignore file.
-	/*/
-	std::string token;
-	{
-		std::ifstream tokenFile("token.dat");
-		if(!tokenFile){
-			std::cerr << "CRITICAL: "
-			          << "There is no valid way for Echo to obtain a token! "
-			          << "Copy the example `token.eg.dat` as `token.dat` to make one.\n";
+	std::string token = getToken();
+	if(token.empty()) {
+		std::cerr << "CRITICAL: "
+						<< "There is no valid way for Echo to obtain a token! Use one of the following ways:" << std::endl
+						<< "(1) Fill the BOT_TOKEN environment variable with the token (e.g. 'Bot 123456abcdef')." << std::endl
+						<< "(2) Copy the example `token.eg.dat` as `token.dat` and write your own token to it.\n";
 			exit(1);
-		}
-		safeGetline(tokenFile, token);
-		tokenFile.close();
 	}
 
 	// Create Bot object
@@ -150,6 +142,31 @@ int main(){
 	bot->run();
 
 	return 0;
+}
+
+std::string getToken() {
+	std::string token;
+
+		/*
+			First attempt to read the token from the BOT_TOKEN environment variable.
+		*/
+	char const* env = std::getenv("BOT_TOKEN");
+	if(env != nullptr) {
+		token = std::string(env);
+	} else {
+		/*/
+		 * Read token from token file.
+		 * Tokens are required to communicate with Discord, and hardcoding tokens is a bad idea.
+		 * If your bot is open source, make sure it's ignore by git in your .gitignore file.
+		/*/
+		std::ifstream tokenFile("token.dat");
+		if(!tokenFile){
+			return "";
+		}
+		safeGetline(tokenFile, token);
+		tokenFile.close();
+	}
+	return token;
 }
 
 /*/

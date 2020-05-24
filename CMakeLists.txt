@@ -7,7 +7,7 @@ add_subdirectory(lib/discordpp)          # discordpp
 add_subdirectory(lib/rest-beast)         # discordpp-rest-beast
 add_subdirectory(lib/websocket-beast)    # discordpp-websocket-beast
 add_subdirectory(lib/plugin-overload)    # discordpp-plugin-overload
-add_subdirectory(lib/plugin-responder)         # discordpp-plugin-new
+add_subdirectory(lib/plugin-responder)   # discordpp-plugin-responder
 
 set(SOURCE_FILES main.cc)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

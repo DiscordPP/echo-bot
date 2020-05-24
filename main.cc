@@ -12,7 +12,17 @@
 namespace asio = boost::asio;
 using json = nlohmann::json;
 namespace dpp = discordpp;
-using DppBot = dpp::PluginResponder<dpp::PluginOverload<dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot> > > >;
+
+using DppBot =
+dpp::PluginResponder<
+		dpp::PluginOverload<
+				dpp::WebsocketBeast<
+						dpp::RestBeast<
+								dpp::Bot
+						>
+				>
+		>
+>;
 
 std::string getToken();
 std::istream &safeGetline(std::istream &is, std::string &t);

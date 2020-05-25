@@ -47,3 +47,9 @@ TARGET_LINK_LIBRARIES(
         Threads::Threads
         ${OPENSSL_LIBRARIES}
 )
+
+if(EXISTS ${CMAKE_SOURCE_DIR}/token.dat)
+	configure_file(token.dat ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+elseif(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/token.dat)
+	file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/token.dat)
+endif()

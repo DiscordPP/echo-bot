@@ -4,6 +4,7 @@
 #include <boost/asio.hpp>
 
 #include <discordpp/bot.hh>
+#include <discordpp/log.hh>
 #include <discordpp/plugin-overload.hh>
 #include <discordpp/rest-beast.hh>
 #include <discordpp/websocket-beast.hh>
@@ -33,6 +34,9 @@ void filter(std::string &target, const std::string &pattern);
 
 
 int main(){
+	dpp::log::filter = dpp::log::trace;
+	dpp::log::out = &std::cerr;
+	
 	std::cout << "Howdy, and thanks for trying out Discord++!\n"
 	          << "Feel free to drop into the official server at https://discord.gg/0usP6xmT4sQ4kIDh if you have any questions.\n\n"
 	          << std::flush;
@@ -77,7 +81,7 @@ int main(){
 	);
 
 	bot->prefix = "~";
-
+	
 	bot->respond("help", "Mention me and I'll echo your message back!");
 
 	bot->respond(

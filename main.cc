@@ -74,7 +74,7 @@ int main(){
 	bot->handlers.insert(
 			{
 					"READY",
-					[&bot, &self](json data){
+					[&self](json data){
 						self = data["user"];
 					}
 			}

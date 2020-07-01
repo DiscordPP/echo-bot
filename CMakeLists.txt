@@ -28,6 +28,9 @@ if (MSVC)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /bigobj")
 endif()
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -fno-omit-frame-pointer")
+
 INCLUDE_DIRECTORIES(
         ${Boost_INCLUDE_DIRS}
         ${discordpp_SOURCE_DIR}

@@ -23,8 +23,9 @@ if (WIN32)
 endif()
 
 if (MSVC)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /bigobj")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /wd4250 /wd4244")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /bigobj")
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
 INCLUDE_DIRECTORIES(

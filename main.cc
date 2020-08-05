@@ -34,7 +34,7 @@ void filter(std::string &target, const std::string &pattern);
 
 
 int main(){
-	dpp::log::filter = dpp::log::trace;
+	dpp::log::filter = dpp::log::info;
 	dpp::log::out = &std::cerr;
 	
 	std::cout << "Howdy, and thanks for trying out Discord++!\n"

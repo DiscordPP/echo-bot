@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.7)
 project(echo_bot)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(lib/discordpp)          # discordpp
 add_subdirectory(lib/rest-beast)         # discordpp-rest-beast
 add_subdirectory(lib/websocket-beast)    # discordpp-websocket-beast
 add_subdirectory(lib/plugin-overload)    # discordpp-plugin-overload
 add_subdirectory(lib/plugin-responder)   # discordpp-plugin-responder
+add_subdirectory(lib/plugin-ratelimit)   # discordpp-plugin-ratelimit
 
 set(SOURCE_FILES main.cc)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
@@ -28,6 +29,9 @@ if (MSVC)
         add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -fno-omit-frame-pointer")
+
 INCLUDE_DIRECTORIES(
         ${Boost_INCLUDE_DIRS}
         ${discordpp_SOURCE_DIR}
@@ -35,6 +39,7 @@ INCLUDE_DIRECTORIES(
         ${discordpp-websocket-beast_SOURCE_DIR}
         ${discordpp-plugin-overload_SOURCE_DIR}
         ${discordpp-plugin-responder_SOURCE_DIR}
+        ${discordpp-plugin-ratelimit_SOURCE_DIR}
         ${json_SOURCE_DIR}
         ${OPENSSL_INCLUDE_DIR}
 )

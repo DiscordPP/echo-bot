@@ -1,15 +1,18 @@
 [submodule "lib/discordpp"]
 	path = lib/discordpp
 	url = https://github.com/DiscordPP/discordpp.git
-[submodule "lib/websocket-beast"]
-	path = lib/websocket-beast
-	url = https://github.com/DiscordPP/websocket-beast.git
-[submodule "lib/rest-beast"]
-	path = lib/rest-beast
-	url = https://github.com/DiscordPP/rest-beast.git
 [submodule "lib/plugin-overload"]
 	path = lib/plugin-overload
 	url = https://github.com/DiscordPP/plugin-overload.git
+[submodule "lib/plugin-ratelimit"]
+	path = lib/plugin-ratelimit
+	url = https://github.com/DiscordPP/plugin-ratelimit.git
 [submodule "lib/plugin-responder"]
 	path = lib/plugin-responder
 	url = https://github.com/DiscordPP/plugin-responder.git
+[submodule "lib/rest-beast"]
+	path = lib/rest-beast
+	url = https://github.com/DiscordPP/rest-beast.git
+[submodule "lib/websocket-beast"]
+	path = lib/websocket-beast
+	url = https://github.com/DiscordPP/websocket-beast.git

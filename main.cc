@@ -4,10 +4,12 @@
 #include <boost/asio.hpp>
 
 #include <discordpp/bot.hh>
+#include <discordpp/log.hh>
 #include <discordpp/plugin-overload.hh>
 #include <discordpp/rest-beast.hh>
 #include <discordpp/websocket-beast.hh>
 #include <discordpp/plugin-responder.hh>
+#include <discordpp/plugin-ratelimit.hh>
 
 namespace asio = boost::asio;
 using json = nlohmann::json;
@@ -16,9 +18,11 @@ namespace dpp = discordpp;
 using DppBot =
 dpp::PluginResponder<
 		dpp::PluginOverload<
-				dpp::WebsocketBeast<
-						dpp::RestBeast<
-								dpp::Bot
+				dpp::PluginRateLimit<
+						dpp::WebsocketBeast<
+								dpp::RestBeast<
+										dpp::Bot
+								>
 						>
 				>
 		>
@@ -31,6 +35,9 @@ void filter(std::string &target, const std::string &pattern);
 
 
 int main(){
+	dpp::log::filter = dpp::log::info;
+	dpp::log::out = &std::cerr;
+	
 	std::cout << "Howdy, and thanks for trying out Discord++!\n"
 	          << "Feel free to drop into the official server at https://discord.gg/0usP6xmT4sQ4kIDh if you have any questions.\n\n"
 	          << std::flush;
@@ -59,14 +66,14 @@ int main(){
 	bot->handlers.insert(
 			{
 					"READY",
-					[&bot, &self](json data){
+					[&self](json data){
 						self = data["user"];
 					}
 			}
 	);
 
 	bot->prefix = "~";
-
+	
 	bot->respond("help", "Mention me and I'll echo your message back!");
 
 	bot->respond(

@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <regex>
 
 #include <boost/asio.hpp>
 
@@ -19,6 +20,7 @@ using DppBot = dpp::PluginResponder<dpp::PluginOverload<
     dpp::PluginRateLimit<dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot>>>>>;
 
 std::string getToken();
+
 std::istream &safeGetline(std::istream &is, std::string &t);
 
 void filter(std::string &target, const std::string &pattern);
@@ -95,21 +97,19 @@ int main() {
              }
              if (mentioned) {
                  // Identify and remove mentions of self from the message
-                 std::string content = msg["content"];
-                 std::string mentioncode =
-                     "<@" + self["id"].get<std::string>() + ">";
-                 std::string nickedcode =
-                     "<@!" + self["id"].get<std::string>() + ">";
-                 filter(content, mentioncode + ' ');
-                 filter(content, nickedcode + ' ');
-                 filter(content, mentioncode);
-                 filter(content, nickedcode);
+                 std::string content = std::regex_replace(
+                     msg["content"].get<std::string>(),
+                     std::regex(R"(<@!?)" + self["id"].get<std::string>() +
+                                R"(> ?)"),
+                     "");
 
-                 while (content.find(mentioncode) != std::string::npos) {
-                     content = content.substr(0, content.find(mentioncode)) +
-                               content.substr(content.find(mentioncode) +
-                                              mentioncode.size());
-                 }
+                 // Get the target user's display name
+                 std::string name =
+                     (msg["member"]["nick"].is_null()
+                          ? msg["author"]["username"].get<std::string>()
+                          : msg["member"]["nick"].get<std::string>());
+
+                 std::cout << "Echoing " << name << '\n';
 
                  // Echo the created message
                  bot->call("POST",
@@ -118,18 +118,11 @@ int main() {
                            json({{"content", content}}));
 
                  // Set status to Playing "with [author]"
-                 bot->send(
-                     3,
-                     {{"game",
-                       {{"name",
-                         "with " +
-                             (msg["member"]["nick"].is_null()
-                                  ? msg["author"]["username"].get<std::string>()
-                                  : msg["member"]["nick"].get<std::string>())},
-                        {"type", 0}}},
-                      {"status", "online"},
-                      {"afk", false},
-                      {"since", "null"}});
+                 bot->send(3,
+                           {{"game", {{"name", "with " + name}, {"type", 0}}},
+                            {"status", "online"},
+                            {"afk", false},
+                            {"since", "null"}});
              }
          }});
 
@@ -149,8 +142,8 @@ std::string getToken() {
     std::string token;
 
     /*
-            First attempt to read the token from the BOT_TOKEN environment
-       variable.
+                    First attempt to read the token from the BOT_TOKEN
+       environment variable.
     */
     char const *env = std::getenv("BOT_TOKEN");
     if (env != nullptr) {
@@ -207,12 +200,5 @@ std::istream &safeGetline(std::istream &is, std::string &t) {
         default:
             t += (char)c;
         }
-    }
-}
-
-void filter(std::string &target, const std::string &pattern) {
-    while (target.find(pattern) != std::string::npos) {
-        target = target.substr(0, target.find(pattern)) +
-                 target.substr(target.find(pattern) + (pattern).size());
     }
 }

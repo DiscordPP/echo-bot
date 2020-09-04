@@ -26,7 +26,7 @@ std::istream &safeGetline(std::istream &is, std::string &t);
 void filter(std::string &target, const std::string &pattern);
 
 int main() {
-    dpp::log::filter = dpp::log::trace;
+    dpp::log::filter = dpp::log::info;
     dpp::log::out = &std::cerr;
 
     std::cout

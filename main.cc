@@ -85,10 +85,6 @@ int main() {
           "/messages",
           json({{"content", content.str()}}));
     });
-    
-    bot->respond("reboot", [&bot](json msg) {
-      bot->reconnect();
-    });
 
     // Create handler for the MESSAGE_CREATE payload, this receives all messages
     // sent that the bot can see.

@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(lib/discordpp)          # discordpp
 add_subdirectory(lib/rest-beast)         # discordpp-rest-beast
-add_subdirectory(lib/websocket-simpleserver)    # discordpp-websocket-beast
+add_subdirectory(lib/websocket-simpleweb)    # discordpp-websocket-beast
 add_subdirectory(lib/plugin-overload)    # discordpp-plugin-overload
 add_subdirectory(lib/plugin-responder)   # discordpp-plugin-responder
 add_subdirectory(lib/plugin-ratelimit)   # discordpp-plugin-ratelimit

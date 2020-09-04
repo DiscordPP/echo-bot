@@ -13,6 +13,6 @@
 [submodule "lib/rest-beast"]
 	path = lib/rest-beast
 	url = https://github.com/DiscordPP/rest-beast.git
-[submodule "lib/websocket-beast"]
-	path = lib/websocket-beast
-	url = https://github.com/DiscordPP/websocket-beast.git
+[submodule "lib/websocket-simpleweb"]
+	path = lib/websocket-simpleweb
+	url = https://github.com/DiscordPP/websocket-simpleweb.git

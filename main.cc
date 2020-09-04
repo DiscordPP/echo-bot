@@ -10,14 +10,14 @@
 #include <discordpp/plugin-ratelimit.hh>
 #include <discordpp/plugin-responder.hh>
 #include <discordpp/rest-beast.hh>
-#include <discordpp/websocket-beast.hh>
+#include <discordpp/websocket-simpleweb.hh>
 
 namespace asio = boost::asio;
 using json = nlohmann::json;
 namespace dpp = discordpp;
 
 using DppBot = dpp::PluginResponder<dpp::PluginOverload<
-    dpp::PluginRateLimit<dpp::WebsocketBeast<dpp::RestBeast<dpp::Bot>>>>>;
+    dpp::PluginRateLimit<dpp::WebsocketSimpleWeb<dpp::RestBeast<dpp::Bot>>>>>;
 
 std::string getToken();
 
@@ -26,7 +26,7 @@ std::istream &safeGetline(std::istream &is, std::string &t);
 void filter(std::string &target, const std::string &pattern);
 
 int main() {
-    dpp::log::filter = dpp::log::info;
+    dpp::log::filter = dpp::log::trace;
     dpp::log::out = &std::cerr;
 
     std::cout
@@ -68,22 +68,26 @@ int main() {
     bot->prefix = "~";
 
     bot->respond("help", "Mention me and I'll echo your message back!");
-
+    
     bot->respond("about", [&bot](json msg) {
-        std::ostringstream content;
-        content
-            << "Sure thing, "
-            << (msg["member"]["nick"].is_null()
-                    ? msg["author"]["username"].get<std::string>()
-                    : msg["member"]["nick"].get<std::string>())
-            << "!\n"
-            << "I'm a simple bot meant to demonstrate the Discord++ library.\n"
-            << "You can learn more about Discord++ at "
-               "https://discord.gg/0usP6xmT4sQ4kIDh";
-        bot->call("POST",
-                  "/channels/" + msg["channel_id"].get<std::string>() +
-                      "/messages",
-                  json({{"content", content.str()}}));
+      std::ostringstream content;
+      content
+          << "Sure thing, "
+          << (msg["member"]["nick"].is_null()
+              ? msg["author"]["username"].get<std::string>()
+              : msg["member"]["nick"].get<std::string>())
+          << "!\n"
+          << "I'm a simple bot meant to demonstrate the Discord++ library.\n"
+          << "You can learn more about Discord++ at "
+             "https://discord.gg/0usP6xmT4sQ4kIDh";
+      bot->call("POST",
+          "/channels/" + msg["channel_id"].get<std::string>() +
+          "/messages",
+          json({{"content", content.str()}}));
+    });
+    
+    bot->respond("reboot", [&bot](json msg) {
+      bot->reconnect();
     });
 
     // Create handler for the MESSAGE_CREATE payload, this receives all messages

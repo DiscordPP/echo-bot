@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(lib/discordpp)          # discordpp
 add_subdirectory(lib/rest-beast)         # discordpp-rest-beast
-add_subdirectory(lib/websocket-beast)    # discordpp-websocket-beast
+add_subdirectory(lib/websocket-simpleserver)    # discordpp-websocket-beast
 add_subdirectory(lib/plugin-overload)    # discordpp-plugin-overload
 add_subdirectory(lib/plugin-responder)   # discordpp-plugin-responder
 add_subdirectory(lib/plugin-ratelimit)   # discordpp-plugin-ratelimit
@@ -36,7 +36,7 @@ INCLUDE_DIRECTORIES(
         ${Boost_INCLUDE_DIRS}
         ${discordpp_SOURCE_DIR}
         ${discordpp-rest-beast_SOURCE_DIR}
-        ${discordpp-websocket-beast_SOURCE_DIR}
+        ${discordpp-websocket-simpleweb_SOURCE_DIR}
         ${discordpp-plugin-overload_SOURCE_DIR}
         ${discordpp-plugin-responder_SOURCE_DIR}
         ${discordpp-plugin-ratelimit_SOURCE_DIR}
@@ -49,7 +49,7 @@ TARGET_LINK_LIBRARIES(
         ${Boost_LIBRARIES}
         discordpp
         discordpp-rest-beast
-        discordpp-websocket-beast
+        discordpp-websocket-simpleweb
         Threads::Threads
         ${OPENSSL_LIBRARIES}
 )

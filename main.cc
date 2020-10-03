@@ -82,11 +82,17 @@ int main() {
              }
              if (mentioned) {
                  // Identify and remove mentions of self from the message
-                 std::string content = std::regex_replace(
-                     msg["content"].get<std::string>(),
-                     std::regex(R"(<@!?)" + self["id"].get<std::string>() +
-                                R"(> ?)"),
-                     "");
+                 std::string content = msg["content"].get<std::string>();
+                 unsigned int oldlength, length = content.length();
+                 do{
+                     oldlength = length;
+                     content = std::regex_replace(
+                         content,
+                         std::regex(R"(<@!?)" + self["id"].get<std::string>() +
+                                    R"(> ?)"),
+                         "");
+                     length = content.length();
+                 }while(oldlength > length);
 
                  // Get the target user's display name
                  std::string name =

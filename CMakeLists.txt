@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.16)
 project(echo_bot)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -12,6 +12,7 @@ add_subdirectory(lib/plugin-ratelimit)   # discordpp-plugin-ratelimit
 
 set(SOURCE_FILES main.cc)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+target_precompile_headers(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include.hh)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 

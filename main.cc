@@ -1,23 +1,8 @@
-#include <fstream>
-#include <iostream>
-#include <regex>
-
-#include <boost/asio.hpp>
-
-#include <discordpp/bot.hh>
-#include <discordpp/log.hh>
-#include <discordpp/plugin-overload.hh>
-#include <discordpp/plugin-ratelimit.hh>
-#include <discordpp/plugin-responder.hh>
-#include <discordpp/rest-beast.hh>
-#include <discordpp/websocket-simpleweb.hh>
+#include "include.hh"
 
 namespace asio = boost::asio;
 using json = nlohmann::json;
 namespace dpp = discordpp;
-
-using DppBot = dpp::PluginResponder<dpp::PluginOverload<
-    dpp::PluginRateLimit<dpp::WebsocketSimpleWeb<dpp::RestBeast<dpp::Bot>>>>>;
 
 std::string getToken();
 
@@ -52,7 +37,7 @@ int main() {
     }
 
     // Create Bot object
-    auto bot = std::make_shared<DppBot>();
+    auto bot = newBot();
     // Don't complain about unhandled events
     bot->debugUnhandled = false;
 
@@ -97,11 +82,17 @@ int main() {
              }
              if (mentioned) {
                  // Identify and remove mentions of self from the message
-                 std::string content = std::regex_replace(
-                     msg["content"].get<std::string>(),
-                     std::regex(R"(<@!?)" + self["id"].get<std::string>() +
-                                R"(> ?)"),
-                     "");
+                 std::string content = msg["content"].get<std::string>();
+                 unsigned int oldlength, length = content.length();
+                 do{
+                     oldlength = length;
+                     content = std::regex_replace(
+                         content,
+                         std::regex(R"(<@!?)" + self["id"].get<std::string>() +
+                                    R"(> ?)"),
+                         "");
+                     length = content.length();
+                 }while(oldlength > length);
 
                  // Get the target user's display name
                  std::string name =

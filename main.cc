@@ -17,7 +17,7 @@ int main() {
     std::cout
         << "Howdy, and thanks for trying out Discord++!\n"
         << "Feel free to drop into the official server at "
-           "https://discord.gg/0usP6xmT4sQ4kIDh if you have any questions.\n\n"
+           "https://discord.gg/VHAyrvspCx if you have any questions.\n\n"
         << std::flush;
 
     std::cout << "Starting bot...\n\n";

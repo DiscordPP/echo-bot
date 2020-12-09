@@ -44,7 +44,7 @@ int main() {
     
     // Declare the intent to receive guild messages
     // You don't need `NONE` it's just to show you how to declare multiple
-    bot->intents = discordpp::intents::NONE & discordpp::intents::GUILD_MESSAGES;
+    bot->intents = discordpp::intents::NONE | discordpp::intents::GUILD_MESSAGES;
 
     /*/
      * Create handler for the READY payload, this may be handled by the bot in

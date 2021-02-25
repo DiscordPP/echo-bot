@@ -14,11 +14,10 @@ int main() {
     dpp::log::filter = dpp::log::info;
     dpp::log::out = &std::cerr;
 
-    std::cout
-        << "Howdy, and thanks for trying out Discord++!\n"
-        << "Feel free to drop into the official server at "
-           "https://discord.gg/VHAyrvspCx if you have any questions.\n\n"
-        << std::flush;
+    std::cout << "Howdy, and thanks for trying out Discord++!\n"
+              << "Feel free to drop into the official server at "
+                 "https://discord.gg/VHAyrvspCx if you have any questions.\n\n"
+              << std::flush;
 
     std::cout << "Starting bot...\n\n";
 
@@ -37,11 +36,11 @@ int main() {
     }
 
     // Create Bot object
-    auto bot = newBot();
-    
+    auto bot = std::make_shared<DppBot>();
+
     // Don't complain about unhandled events
     bot->debugUnhandled = false;
-    
+
     // Declare the intent to receive guild messages
     // You don't need `NONE` it's just to show you how to declare multiple
     bot->intents = dpp::intents::NONE | dpp::intents::GUILD_MESSAGES;
@@ -58,22 +57,24 @@ int main() {
     bot->prefix = "~";
 
     bot->respond("help", "Mention me and I'll echo your message back!");
-    
+
     bot->respond("about", [&bot](json msg) {
-      std::ostringstream content;
-      content
-          << "Sure thing, "
-          << (msg["member"]["nick"].is_null()
-              ? msg["author"]["username"].get<std::string>()
-              : msg["member"]["nick"].get<std::string>())
-          << "!\n"
-          << "I'm a simple bot meant to demonstrate the Discord++ library.\n"
-          << "You can learn more about Discord++ at "
-             "https://discord.gg/0usP6xmT4sQ4kIDh";
-      bot->call("POST",
-          "/channels/" + msg["channel_id"].get<std::string>() +
-          "/messages",
-          json({{"content", content.str()}}));
+        std::ostringstream content;
+        content
+            << "Sure thing, "
+            << (msg["member"]["nick"].is_null()
+                    ? msg["author"]["username"].get<std::string>()
+                    : msg["member"]["nick"].get<std::string>())
+            << "!\n"
+            << "I'm a simple bot meant to demonstrate the Discord++ library.\n"
+            << "You can learn more about Discord++ at "
+               "https://discord.gg/0usP6xmT4sQ4kIDh";
+        bot->callJson()
+            ->method("POST")
+            ->target("/channels/" + msg["channel_id"].get<std::string>() +
+                     "/messages")
+            ->payload({{"content", content.str()}})
+            ->run();
     });
 
     // Create handler for the MESSAGE_CREATE payload, this receives all messages
@@ -89,7 +90,7 @@ int main() {
                  // Identify and remove mentions of self from the message
                  std::string content = msg["content"].get<std::string>();
                  unsigned int oldlength, length = content.length();
-                 do{
+                 do {
                      oldlength = length;
                      content = std::regex_replace(
                          content,
@@ -97,7 +98,7 @@ int main() {
                                     R"(> ?)"),
                          "");
                      length = content.length();
-                 }while(oldlength > length);
+                 } while (oldlength > length);
 
                  // Get the target user's display name
                  std::string name =
@@ -108,10 +109,13 @@ int main() {
                  std::cout << "Echoing " << name << '\n';
 
                  // Echo the created message
-                 bot->call("POST",
-                           "/channels/" + msg["channel_id"].get<std::string>() +
-                               "/messages",
-                           json({{"content", content}}));
+                 bot->callJson()
+                     ->method("POST")
+                     ->target("/channels/" +
+                              msg["channel_id"].get<std::string>() +
+                              "/messages")
+                     ->payload({{"content", content}})
+                     ->run();
 
                  // Set status to Playing "with [author]"
                  bot->send(3,

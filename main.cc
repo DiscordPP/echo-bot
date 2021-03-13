@@ -68,12 +68,44 @@ int main() {
             << "!\n"
             << "I'm a simple bot meant to demonstrate the Discord++ library.\n"
             << "You can learn more about Discord++ at "
-               "https://discord.gg/0usP6xmT4sQ4kIDh";
-        bot->callJson()
-            ->method("POST")
+               "https://discord.gg/VHAyrvspCx";
+        bot->createMessage()
+            ->channel_id(dpp::get_snowflake(msg["channel_id"]))
+            ->content(content.str())
+            ->run();
+    });
+
+    bot->respond("cancun", [&bot](json msg) {
+        std::ifstream ifs("cancun.jpg", std::ios::binary);
+        if (!ifs) {
+            std::cerr << "Couldn't load file 'cancun.jpg'!\n";
+            return;
+        }
+        ifs.seekg(0, std::ios::end);
+        std::ifstream::pos_type fileSize = ifs.tellg();
+        ifs.seekg(0, std::ios::beg);
+        auto file = std::make_shared<std::string>(fileSize, '\0');
+        ifs.read(file->data(), fileSize);
+
+        bot->callFile()
             ->target("/channels/" + msg["channel_id"].get<std::string>() +
                      "/messages")
-            ->payload({{"content", content.str()}})
+            ->payload({{"content", "We're goin' on a trip"}})
+            ->filename("cancun.jpg")
+            ->filetype("image/jpg")
+            ->file(file)
+            ->run();
+    });
+
+    bot->respond("channelinfo", [&bot](json msg) {
+        bot->getChannel()
+            ->channel_id(dpp::get_snowflake(msg["channel_id"]))
+            ->onRead([&bot, msg](bool error, json res) {
+                bot->createMessage()
+                    ->channel_id(dpp::get_snowflake(msg["channel_id"]))
+                    ->content("```json\n" + res["body"].dump(4) + "\n```")
+                    ->run();
+            })
             ->run();
     });
 
@@ -109,12 +141,9 @@ int main() {
                  std::cout << "Echoing " << name << '\n';
 
                  // Echo the created message
-                 bot->callJson()
-                     ->method("POST")
-                     ->target("/channels/" +
-                              msg["channel_id"].get<std::string>() +
-                              "/messages")
-                     ->payload({{"content", content}})
+                 bot->createMessage()
+                     ->channel_id(dpp::get_snowflake(msg["channel_id"]))
+                     ->content(content)
                      ->run();
 
                  // Set status to Playing "with [author]"

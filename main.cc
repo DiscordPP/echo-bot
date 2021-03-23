@@ -87,10 +87,9 @@ int main() {
         auto file = std::make_shared<std::string>(fileSize, '\0');
         ifs.read(file->data(), fileSize);
 
-        bot->callFile()
-            ->target("/channels/" + msg["channel_id"].get<std::string>() +
-                     "/messages")
-            ->payload({{"content", "We're goin' on a trip"}})
+        bot->createMessage()
+            ->channel_id(dpp::get_snowflake(msg["channel_id"]))
+            ->content("We're goin' on a trip")
             ->filename("cancun.jpg")
             ->filetype("image/jpg")
             ->file(file)

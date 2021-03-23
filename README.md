@@ -26,21 +26,22 @@
  * Vcpkg is a cross platform library manager, you can install it by reading the instructions on this [page](https://github.com/microsoft/vcpkg)
  * **This program is required for building Echo under Windows.**
 #### <sup>AND</sup> Install Libraries
+Note: Discord++ requires a minimum of Boost 1.71. If you're using an older distro your package repositories may have an older version.
+
  * Debian-based (Ubuntu) `sudo apt install build-essential libboost-all-dev libssl-dev`
  * Fedora/RHEL-based `sudo dnf install openssl-devel boost-devel`
  * Vcpkg `vcpkg install boost-system boost-beast openssl`
 #### <sup>OR</sup> Install Everything at Once
  * Debian-based (Ubuntu) `sudo apt install git clang cmake build-essential libboost-all-dev libssl-dev`
 
-### Set Up Repository
-#### Fork Echo <sup>Optional, I guess</sup>
- * Click the 'Fork' button in the upper-right of the repo's page
- * If you're in an organization, elect the where you want the fork to go
- * Click on your new 'Settings' tab, and rename your new repo
+### Set Up Your Repository
+#### Use Echo as a template <sup>Optional, I guess</sup>
+ * Click the 'Use this template' button in the upper-right of the repo's page right above the number of commits
+ * Follow the steps GitHub gives you
  
 #### Clone the Code
 Run `git clone --recursive https://github.com/discordpp/echo-bot.git` in your desired directory.
-If you made a fork, replace `echo-bot` as applicable.
+If you used Echo as a template, replace `echo-bot` as applicable.
 
 ### Register a Bot
  1. Go to Discord's [Developer Portal 'Application' page](https://discordapp.com/developers/applications/), it will prompt you to sign in <sup>By the way, do you have 2FA enabled? It's a really good idea, especially with bots on your account</sup>

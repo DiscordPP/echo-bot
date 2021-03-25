@@ -3,14 +3,14 @@ project(echo_bot)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_subdirectory(lib/discordpp)          # discordpp
-add_subdirectory(lib/rest-beast)         # discordpp-rest-beast
-add_subdirectory(lib/websocket-simpleweb)    # discordpp-websocket-beast
-add_subdirectory(lib/plugin-overload)    # discordpp-plugin-overload
-add_subdirectory(lib/plugin-responder)   # discordpp-plugin-responder
-add_subdirectory(lib/plugin-ratelimit)   # discordpp-plugin-ratelimit
-add_subdirectory(lib/plugin-endpoints)   # discordpp-plugin-constructs
-add_subdirectory(lib/plugin-constructs)   # discordpp-plugin-constructs
+add_subdirectory(lib/discordpp)
+add_subdirectory(lib/rest-beast)
+add_subdirectory(lib/websocket-simpleweb)
+add_subdirectory(lib/plugin-overload)
+add_subdirectory(lib/plugin-responder)
+add_subdirectory(lib/plugin-ratelimit)
+add_subdirectory(lib/plugin-endpoints)
+add_subdirectory(lib/plugin-constructs)
 
 set(SOURCE_FILES main.cc extern.cc)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
@@ -35,29 +35,19 @@ endif ()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -fno-omit-frame-pointer")
 
-INCLUDE_DIRECTORIES(
-        ${Boost_INCLUDE_DIRS}
-        ${discordpp_SOURCE_DIR}
-        ${discordpp-rest-beast_SOURCE_DIR}
-        ${discordpp-websocket-simpleweb_SOURCE_DIR}
-        ${discordpp-plugin-overload_SOURCE_DIR}
-        ${discordpp-plugin-responder_SOURCE_DIR}
-        ${discordpp-plugin-ratelimit_SOURCE_DIR}
-        ${discordpp-plugin-constructs_SOURCE_DIR}
-        ${discordpp-plugin-endpoints_SOURCE_DIR}
-        ${json_SOURCE_DIR}
-        ${OPENSSL_INCLUDE_DIR}
-)
-
 TARGET_LINK_LIBRARIES(
         ${PROJECT_NAME}
         ${Boost_LIBRARIES}
+        Threads::Threads
+        ${OPENSSL_LIBRARIES}
         discordpp
         discordpp-rest-beast
         discordpp-websocket-simpleweb
+        discordpp-plugin-overload
+        discordpp-plugin-responder
+        discordpp-plugin-ratelimit
         discordpp-plugin-constructs
-        Threads::Threads
-        ${OPENSSL_LIBRARIES}
+        discordpp-plugin-endpoints
 )
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/token.dat)

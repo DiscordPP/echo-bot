@@ -75,10 +75,10 @@ int main() {
             ->run();
     });
 
-    bot->respond("cancun", [&bot](json msg) {
+    bot->respond("lookatthis", [&bot](json msg) {
         std::ifstream ifs("cancun.jpg", std::ios::binary);
         if (!ifs) {
-            std::cerr << "Couldn't load file 'cancun.jpg'!\n";
+            std::cerr << "Couldn't load file 'image.jpg'!\n";
             return;
         }
         ifs.seekg(0, std::ios::end);
@@ -89,8 +89,8 @@ int main() {
 
         bot->createMessage()
             ->channel_id(dpp::get_snowflake(msg["channel_id"]))
-            ->content("We're goin' on a trip")
-            ->filename("cancun.jpg")
+            ->content("Look at this photograph")
+            ->filename("image.jpg")
             ->filetype("image/jpg")
             ->file(file)
             ->run();

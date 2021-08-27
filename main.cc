@@ -76,7 +76,7 @@ int main() {
     });
 
     bot->respond("lookatthis", [&bot](json msg) {
-        std::ifstream ifs("cancun.jpg", std::ios::binary);
+        std::ifstream ifs("image.jpg", std::ios::binary);
         if (!ifs) {
             std::cerr << "Couldn't load file 'image.jpg'!\n";
             return;

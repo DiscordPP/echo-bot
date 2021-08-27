@@ -50,8 +50,13 @@ TARGET_LINK_LIBRARIES(
         discordpp-plugin-endpoints
 )
 
-if (EXISTS ${CMAKE_SOURCE_DIR}/token.dat)
-    configure_file(token.dat ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
-elseif (EXISTS ${CMAKE_CURRENT_BINARY_DIR}/token.dat)
-    file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/token.dat)
-endif ()
+function(SYNC_FILE FILE)
+    if (EXISTS ${CMAKE_SOURCE_DIR}/${FILE})
+        configure_file(${FILE} ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+    elseif (EXISTS ${CMAKE_CURRENT_BINARY_DIR}/${FILE})
+        file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/${FILE})
+    endif ()
+endfunction(SYNC_FILE)
+
+SYNC_FILE(token.dat)
+SYNC_FILE(image.jpg)

@@ -39,7 +39,7 @@ int main() {
     auto bot = std::make_shared<DppBot>();
 
     // Don't complain about unhandled events
-    bot->debugUnhandled = false;
+    bot->debugUnhandled = true;
 
     // Declare the intent to receive guild messages
     // You don't need `NONE` it's just to show you how to declare multiple
@@ -107,6 +107,36 @@ int main() {
             })
             ->run();
     });
+
+    bot->respond("registerslash", [&bot, &self](json msg) {
+        if (msg["author"]["id"].get<std::string>() == "106615803402547200") {
+            bot->createGuildApplicationCommand()
+                ->application_id(dpp::get_snowflake(self["id"]))
+                ->guild_id(dpp::get_snowflake(msg["guild_id"]))
+                ->name("echo")
+                ->description("Echoes what you say")
+                ->options({{{"type", 3},
+                            {"name", "message"},
+                            {"description", "The message to echo"},
+                            {"required", true}}})
+                ->command_type(DppBot::CHAT_INPUT)
+                ->onRead([](bool error, json res) {
+                    std::cout << res.dump(4) << std::endl;
+                })
+                ->run();
+        }
+    });
+
+    bot->interactionHandlers.insert(
+        {881674285683470376, [&bot, &self](json msg) {
+             bot->createResponse()
+                 ->interaction_id(
+                     dpp::get_snowflake(msg["id"])) // 881674285683470376)
+                 ->interaction_token(msg["token"].get<std::string>())
+                 ->interaction_type(DppBot::CHANNEL_MESSAGE_WITH_SOURCE)
+                 ->data({{"content", msg["data"]["options"][0]["value"]}})
+                 ->run();
+         }});
 
     // Create handler for the MESSAGE_CREATE payload, this receives all messages
     // sent that the bot can see.

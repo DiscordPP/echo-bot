@@ -22,3 +22,6 @@
 [submodule "lib/plugin-endpoints"]
 	path = lib/plugin-endpoints
 	url = https://github.com/DiscordPP/plugin-endpoints.git
+[submodule "lib/plugin-interactionhandler"]
+	path = lib/plugin-interactionhandler
+	url = git@github.com:UndarkAido/plugin-interactionhandler.git

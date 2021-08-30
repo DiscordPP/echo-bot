@@ -9,8 +9,9 @@ add_subdirectory(lib/websocket-simpleweb)
 add_subdirectory(lib/plugin-overload)
 add_subdirectory(lib/plugin-responder)
 add_subdirectory(lib/plugin-ratelimit)
-add_subdirectory(lib/plugin-endpoints)
 add_subdirectory(lib/plugin-constructs)
+add_subdirectory(lib/plugin-endpoints)
+add_subdirectory(lib/plugin-interactionhandler)
 
 set(SOURCE_FILES main.cc extern.cc)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
@@ -48,6 +49,7 @@ TARGET_LINK_LIBRARIES(
         discordpp-plugin-ratelimit
         discordpp-plugin-constructs
         discordpp-plugin-endpoints
+        discordpp-plugin-interactionhandler
 )
 
 function(SYNC_FILE FILE)

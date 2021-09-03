@@ -70,7 +70,7 @@ int main() {
             << "You can learn more about Discord++ at "
                "https://discord.gg/VHAyrvspCx";
         bot->createMessage()
-            ->channel_id(dpp::get_snowflake(msg["channel_id"]))
+            ->channel_id(msg["channel_id"].get<dpp::Snowflake>())
             ->content(content.str())
             ->run();
     });
@@ -88,7 +88,7 @@ int main() {
         ifs.read(file->data(), fileSize);
 
         bot->createMessage()
-            ->channel_id(dpp::get_snowflake(msg["channel_id"]))
+            ->channel_id(msg["channel_id"].get<dpp::Snowflake>())
             ->content("Look at this photograph")
             ->filename("image.jpg")
             ->filetype("image/jpg")
@@ -98,10 +98,10 @@ int main() {
 
     bot->respond("channelinfo", [&bot](json msg) {
         bot->getChannel()
-            ->channel_id(dpp::get_snowflake(msg["channel_id"]))
+            ->channel_id(msg["channel_id"].get<dpp::Snowflake>())
             ->onRead([&bot, msg](bool error, json res) {
                 bot->createMessage()
-                    ->channel_id(dpp::get_snowflake(msg["channel_id"]))
+                    ->channel_id(msg["channel_id"].get<dpp::Snowflake>())
                     ->content("```json\n" + res["body"].dump(4) + "\n```")
                     ->run();
             })
@@ -111,8 +111,8 @@ int main() {
     bot->respond("registerslash", [&bot, &self](json msg) {
         if (msg["author"]["id"].get<std::string>() == "106615803402547200") {
             bot->createGuildApplicationCommand()
-                ->application_id(dpp::get_snowflake(self["id"]))
-                ->guild_id(dpp::get_snowflake(msg["guild_id"]))
+                ->application_id(self["id"].get<dpp::Snowflake>())
+                ->guild_id(msg["guild_id"].get<dpp::Snowflake>())
                 ->name("echo")
                 ->description("Echoes what you say")
                 ->options({{{"type", 3},
@@ -131,7 +131,7 @@ int main() {
         {881674285683470376, [&bot, &self](json msg) {
              bot->createResponse()
                  ->interaction_id(
-                     dpp::get_snowflake(msg["id"])) // 881674285683470376)
+                     msg["id"].get<dpp::Snowflake>())
                  ->interaction_token(msg["token"].get<std::string>())
                  ->interaction_type(dpp::CHANNEL_MESSAGE_WITH_SOURCE)
                  ->data({{"content", msg["data"]["options"][0]["value"]}})
@@ -171,7 +171,7 @@ int main() {
 
                  // Echo the created message
                  bot->createMessage()
-                     ->channel_id(dpp::get_snowflake(msg["channel_id"]))
+                     ->channel_id(msg["channel_id"].get<dpp::Snowflake>())
                      ->content(content)
                      ->run();
 

@@ -20,7 +20,6 @@
 #include <discordpp/plugin-overload.hh>
 #include <discordpp/plugin-ratelimit.hh>
 #include <discordpp/plugin-responder.hh>
-#include <discordpp/plugin-constructs.hh>
 #include <discordpp/plugin-endpoints.hh>
 #include <discordpp/plugin-interactionhandler.hh>
 #include <discordpp/rest-beast.hh>
@@ -30,8 +29,8 @@
 
 #ifndef ECHO_EXTERN
 
-extern template class discordpp::PluginInteractionHandler<discordpp::PluginEndpoints<discordpp::PluginConstructs<discordpp::PluginResponder<discordpp::PluginOverload<discordpp::PluginRateLimit<discordpp::WebsocketSimpleWeb<discordpp::RestBeast<discordpp::Bot>>>>>>>>;
-using DppBot = discordpp::PluginInteractionHandler<discordpp::PluginEndpoints<discordpp::PluginConstructs<discordpp::PluginResponder<discordpp::PluginOverload<discordpp::PluginRateLimit<discordpp::WebsocketSimpleWeb<discordpp::RestBeast<discordpp::Bot>>>>>>>>;
+extern template class discordpp::PluginInteractionHandler<discordpp::PluginEndpoints<discordpp::PluginResponder<discordpp::PluginOverload<discordpp::PluginRateLimit<discordpp::WebsocketSimpleWeb<discordpp::RestBeast<discordpp::Bot>>>>>>>;
+using DppBot = discordpp::PluginInteractionHandler<discordpp::PluginEndpoints<discordpp::PluginResponder<discordpp::PluginOverload<discordpp::PluginRateLimit<discordpp::WebsocketSimpleWeb<discordpp::RestBeast<discordpp::Bot>>>>>>>;
 
 #undef DPPBOTDEF
 

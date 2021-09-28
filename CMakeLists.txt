@@ -6,11 +6,14 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(lib/discordpp)
 add_subdirectory(lib/rest-beast)
 add_subdirectory(lib/websocket-simpleweb)
+add_subdirectory(lib/plugin-endpoints)
 add_subdirectory(lib/plugin-overload)
 add_subdirectory(lib/plugin-responder)
-add_subdirectory(lib/plugin-ratelimit)
-add_subdirectory(lib/plugin-endpoints)
 add_subdirectory(lib/plugin-interactionhandler)
+add_subdirectory(lib/plugin-ratelimit)
+
+list(JOIN ALL_DISCORDPP_PLUGINS , ALL_DISCORDPP_PLUGINS_JOINED)
+add_compile_definitions(ALL_DISCORDPP_PLUGINS=${ALL_DISCORDPP_PLUGINS_JOINED})
 
 set(SOURCE_FILES main.cc extern.cc)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
@@ -40,14 +43,7 @@ TARGET_LINK_LIBRARIES(
         ${Boost_LIBRARIES}
         Threads::Threads
         ${OPENSSL_LIBRARIES}
-        discordpp
-        discordpp-rest-beast
-        discordpp-websocket-simpleweb
-        discordpp-plugin-overload
-        discordpp-plugin-responder
-        discordpp-plugin-ratelimit
-        discordpp-plugin-endpoints
-        discordpp-plugin-interactionhandler
+        ${ALL_DISCORDPP_LIBRARIES}
 )
 
 function(SYNC_FILE FILE)

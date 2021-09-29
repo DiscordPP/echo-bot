@@ -4,7 +4,7 @@ project(echo_bot)
 set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(lib/discordpp)
-add_subdirectory(lib/rest-simpleweb)
+add_subdirectory(lib/rest-beast)
 add_subdirectory(lib/websocket-simpleweb)
 add_subdirectory(lib/plugin-endpoints)
 add_subdirectory(lib/plugin-overload)

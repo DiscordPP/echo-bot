@@ -10,6 +10,9 @@
 [submodule "lib/plugin-responder"]
 	path = lib/plugin-responder
 	url = https://github.com/DiscordPP/plugin-responder.git
+[submodule "lib/rest-beast"]
+	path = lib/rest-beast
+	url = https://github.com/DiscordPP/rest-beast.git
 [submodule "lib/websocket-simpleweb"]
 	path = lib/websocket-simpleweb
 	url = https://github.com/DiscordPP/websocket-simpleweb.git
@@ -19,6 +22,3 @@
 [submodule "lib/plugin-interactionhandler"]
 	path = lib/plugin-interactionhandler
 	url = git@github.com:UndarkAido/plugin-interactionhandler.git
-[submodule "lib/rest-simpleweb"]
-	path = lib/rest-simpleweb
-	url = https://github.com/DiscordPP/rest-simpleweb.git

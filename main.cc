@@ -1,6 +1,8 @@
 #include "include.hh"
 
+#ifndef ASIO_STANDALONE
 namespace asio = boost::asio;
+#endif
 using json = nlohmann::json;
 namespace dpp = discordpp;
 
@@ -130,8 +132,7 @@ int main() {
     bot->interactionHandlers.insert(
         {881674285683470376, [&bot, &self](json msg) {
              bot->createResponse()
-                 ->interaction_id(
-                     msg["id"].get<dpp::Snowflake>())
+                 ->interaction_id(msg["id"].get<dpp::Snowflake>())
                  ->interaction_token(msg["token"].get<std::string>())
                  ->interaction_type(dpp::CHANNEL_MESSAGE_WITH_SOURCE)
                  ->data({{"content", msg["data"]["options"][0]["value"]}})
@@ -142,6 +143,12 @@ int main() {
     // sent that the bot can see.
     bot->handlers.insert(
         {"MESSAGE_CREATE", [&bot, &self](json msg) {
+             // Ignore messages from other bots
+             if (msg["author"].contains("bot") &&
+                 msg["author"]["bot"].get<bool>()) {
+                 return;
+             }
+
              // Scan through mentions in the message for self
              bool mentioned = false;
              for (const json &mention : msg["mentions"]) {

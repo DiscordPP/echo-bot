@@ -3,6 +3,8 @@ project(echo_bot)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(DISCORDPP_USE_BOOST true)
+
 add_subdirectory(lib/discordpp)
 add_subdirectory(lib/rest-beast)
 add_subdirectory(lib/websocket-simpleweb)
@@ -21,7 +23,9 @@ target_precompile_headers(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include.h
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 
-find_package(Boost 1.71.0 REQUIRED system date_time)
+if (${DISCORDPP_USE_BOOST})
+    find_package(Boost 1.71.0 REQUIRED system date_time)
+endif ()
 find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
 

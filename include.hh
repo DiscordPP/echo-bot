@@ -14,7 +14,11 @@
 #include <iostream>
 #include <regex>
 
+#ifdef ASIO_STANDALONE
+#include <asio.hpp>
+#else
 #include <boost/asio.hpp>
+#endif
 
 // Put more non-plugin `include`s here
 

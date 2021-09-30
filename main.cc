@@ -1,6 +1,8 @@
 #include "include.hh"
 
+#ifndef ASIO_STANDALONE
 namespace asio = boost::asio;
+#endif
 using json = nlohmann::json;
 namespace dpp = discordpp;
 

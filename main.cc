@@ -144,8 +144,9 @@ int main() {
     bot->handlers.insert(
         {"MESSAGE_CREATE", [&bot, &self](json msg) {
              // Ignore messages from other bots
-             if (msg["author"].contains("bot") &&
-                 msg["author"]["bot"].get<bool>()) {
+             if (msg.contains("webhook_id") ||
+                 (msg["author"].contains("bot") &&
+                  msg["author"]["bot"].get<bool>())) {
                  return;
              }
 

@@ -13,6 +13,7 @@ add_subdirectory(lib/plugin-overload)
 add_subdirectory(lib/plugin-responder)
 add_subdirectory(lib/plugin-interactionhandler)
 add_subdirectory(lib/plugin-ratelimit)
+add_subdirectory(lib/plugin-objects)
 
 list(JOIN ALL_DISCORDPP_PLUGINS , ALL_DISCORDPP_PLUGINS_JOINED)
 add_compile_definitions(ALL_DISCORDPP_PLUGINS=${ALL_DISCORDPP_PLUGINS_JOINED})

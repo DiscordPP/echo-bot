@@ -121,7 +121,7 @@ int main() {
                             {"name", "message"},
                             {"description", "The message to echo"},
                             {"required", true}}})
-                ->command_type(dpp::CHAT_INPUT)
+                ->command_type(dpp::ApplicationCommandType::CHAT_INPUT)
                 ->onRead([](bool error, json res) {
                     std::cout << res.dump(4) << std::endl;
                 })
@@ -130,11 +130,11 @@ int main() {
     });
 
     bot->interactionHandlers.insert(
-        {881674285683470376, [&bot, &self](json msg) {
+        {881674285683470376, [&bot](json msg) {
              bot->createResponse()
                  ->interaction_id(msg["id"].get<dpp::Snowflake>())
                  ->interaction_token(msg["token"].get<std::string>())
-                 ->interaction_type(dpp::CHANNEL_MESSAGE_WITH_SOURCE)
+                 ->interaction_type(dpp::InteractionCallbackType::CHANNEL_MESSAGE_WITH_SOURCE)
                  ->data({{"content", msg["data"]["options"][0]["value"]}})
                  ->run();
          }});

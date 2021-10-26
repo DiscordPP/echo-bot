@@ -1,6 +1,3 @@
-[submodule "lib/discordpp"]
-	path = lib/discordpp
-	url = https://github.com/DiscordPP/discordpp.git
 [submodule "lib/plugin-overload"]
 	path = lib/plugin-overload
 	url = https://github.com/DiscordPP/plugin-overload.git
@@ -25,3 +22,6 @@
 [submodule "lib/plugin-interactionhandler"]
 	path = lib/plugin-interactionhandler
 	url = https://github.com/DiscordPP/plugin-interactionhandler.git
+[submodule "lib/discordpp"]
+	path = lib/discordpp
+	url = https://github.com/DiscordPP/discordpp.git

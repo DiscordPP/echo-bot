@@ -4,7 +4,7 @@
 namespace asio = boost::asio;
 #endif
 using json = nlohmann::json;
-namespace dpp = discordpp;
+namespace d = discordpp;
 
 std::string getToken();
 
@@ -13,8 +13,8 @@ std::istream &safeGetline(std::istream &is, std::string &t);
 void filter(std::string &target, const std::string &pattern);
 
 int main() {
-    dpp::log::filter = dpp::log::info;
-    dpp::log::out = &std::cerr;
+    d::log::filter = d::log::info;
+    d::log::out = &std::cerr;
 
     std::cout << "Howdy, and thanks for trying out Discord++!\n"
               << "Feel free to drop into the official server at "
@@ -45,24 +45,24 @@ int main() {
 
     // Declare the intent to receive guild messages
     // You don't need `NONE` it's just to show you how to declare multiple
-    bot->intents = dpp::intents::NONE | dpp::intents::GUILD_MESSAGES;
+    bot->intents = d::intents::NONE | d::intents::GUILD_MESSAGES;
 
     /*/
      * Create handler for the READY payload, this may be handled by the bot in
     the future.
      * The `self` object contains all information about the 'bot' user.
     /*/
-    dpp::User self;
+    d::User self;
     bot->handlers.insert(
-        {"READY", dpp::objectify<dpp::Ready>(
-                      [&self](dpp::Ready ready) { self = *ready.user; })});
+        {"READY", d::objectify<d::Ready>(
+                      [&self](d::Ready ready) { self = *ready.user; })});
 
     bot->prefix = "~";
 
     bot->respond("help", "Mention me and I'll echo your message back!");
 
     bot->respond("about",
-                 dpp::objectify<dpp::Message>([&bot](dpp::Message msg) {
+                 d::objectify<d::Message>([&bot](d::Message msg) {
                      std::ostringstream content;
                      content << "Sure thing, "
                              << *(msg.member->nick ? msg.author->username
@@ -79,7 +79,7 @@ int main() {
                  }));
 
     bot->respond("lookatthis",
-                 dpp::objectify<dpp::Message>([&bot](dpp::Message msg) {
+                 d::objectify<d::Message>([&bot](d::Message msg) {
                      std::ifstream ifs("image.jpg", std::ios::binary);
                      if (!ifs) {
                          std::cerr << "Couldn't load file 'image.jpg'!\n";
@@ -101,7 +101,7 @@ int main() {
                  }));
 
     bot->respond(
-        "channelinfo", dpp::objectify<dpp::Message>([&bot](dpp::Message msg) {
+        "channelinfo", d::objectify<d::Message>([&bot](d::Message msg) {
             bot->getChannel()
                 ->channel_id(*msg.channel_id)
                 ->onRead([&bot, msg](bool error, json res) {
@@ -114,7 +114,7 @@ int main() {
         }));
 
     bot->respond("registerslash",
-                 dpp::objectify<dpp::Message>([&bot, &self](dpp::Message msg) {
+                 d::objectify<d::Message>([&bot, &self](d::Message msg) {
                      if (*msg.author->id == 106615803402547200) {
                          bot->createGuildApplicationCommand()
                              ->application_id(*self.id)
@@ -126,7 +126,7 @@ int main() {
                                          {"description", "The message to echo"},
                                          {"required", true}}})
                              ->command_type(
-                                 dpp::ApplicationCommandType::CHAT_INPUT)
+                                 d::ApplicationCommandType::CHAT_INPUT)
                              ->onRead([](bool error, json res) {
                                  std::cout << res.dump(4) << std::endl;
                              })
@@ -136,12 +136,12 @@ int main() {
 
     bot->interactionHandlers.insert(
         {881674285683470376,
-         dpp::objectify<dpp::Interaction>([&bot](dpp::Interaction msg) {
+         d::objectify<d::Interaction>([&bot](d::Interaction msg) {
              bot->createResponse()
                  ->interaction_id(*msg.id)
                  ->interaction_token(*msg.token)
                  ->interaction_type(
-                     dpp::InteractionCallbackType::CHANNEL_MESSAGE_WITH_SOURCE)
+                     d::InteractionCallbackType::CHANNEL_MESSAGE_WITH_SOURCE)
                  ->data({{"content", *msg.data->options->at(0).value}})
                  ->run();
          })});
@@ -150,7 +150,7 @@ int main() {
     // sent that the bot can see.
     bot->handlers.insert(
         {"MESSAGE_CREATE",
-         dpp::objectify<dpp::Message>([&bot, &self](const dpp::Message msg) {
+         d::objectify<d::Message>([&bot, &self](const d::Message msg) {
              // Ignore messages from other bots
              if (msg.webhook_id || (msg.author->bot && *msg.author->bot)) {
                  return;
@@ -158,7 +158,7 @@ int main() {
 
              // Scan through mentions in the message for self
              bool mentioned = false;
-             for (const dpp::User &mention : *msg.mentions) {
+             for (const d::User &mention : *msg.mentions) {
                  mentioned = mentioned || (*mention.id == *self.id);
              }
              if (mentioned) {
@@ -205,7 +205,7 @@ int main() {
     // Run the bot!
     bot->run();
 
-    dpp::Message m;
+    d::Message m;
 
     return 0;
 }

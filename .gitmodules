@@ -25,3 +25,6 @@
 [submodule "lib/discordpp"]
 	path = lib/discordpp
 	url = https://github.com/DiscordPP/discordpp.git
+[submodule "lib/plugin-dpp-etf"]
+	path = lib/plugin-dpp-etf
+	url = https://github.com/UndarkAido/plugin-dpp-etf.git

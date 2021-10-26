@@ -16,12 +16,12 @@
 [submodule "lib/plugin-endpoints"]
 	path = lib/plugin-endpoints
 	url = https://github.com/DiscordPP/plugin-endpoints.git
-[submodule "lib/plugin-interactionhandler"]
-	path = lib/plugin-interactionhandler
-	url = https://github.com/DiscordPP/plugin-interactionhandler.git
 [submodule "lib/rest-simpleweb"]
 	path = lib/rest-simpleweb
 	url = https://github.com/DiscordPP/rest-simpleweb.git
 [submodule "lib/plugin-objects"]
 	path = lib/plugin-objects
 	url = https://github.com/DiscordPP/plugin-objects.git
+[submodule "lib/plugin-interactionhandler"]
+	path = lib/plugin-interactionhandler
+	url = https://github.com/DiscordPP/plugin-interactionhandler.git

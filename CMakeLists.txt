@@ -3,7 +3,7 @@ project(echo_bot)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(DISCORDPP_USE_BOOST false)
+set(DISCORDPP_USE_BOOST OFF CACHE BOOL "Override option" FORCE)
 
 add_subdirectory(lib/discordpp)
 add_subdirectory(lib/rest-simpleweb)

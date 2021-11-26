@@ -54,89 +54,80 @@ int main() {
     /*/
     dpp::User self;
     bot->handlers.insert(
-        {"READY", dpp::objectify<dpp::Ready>(
-                      [&self](dpp::Ready ready) { self = *ready.user; })});
+        {"READY", [&self](dpp::Ready ready) { self = *ready.user; }});
 
     bot->prefix = "~";
 
     bot->respond("help", "Mention me and I'll echo your message back!");
 
-    bot->respond("about",
-                 dpp::objectify<dpp::Message>([&bot](dpp::Message msg) {
-                     std::ostringstream content;
-                     content << "Sure thing, "
-                             << *(msg.member->nick ? msg.author->username
-                                                   : msg.member->nick)
-                             << "!\n"
-                             << "I'm a simple bot meant to demonstrate the "
-                                "Discord++ library.\n"
-                             << "You can learn more about Discord++ at "
-                                "https://discord.gg/VHAyrvspCx";
-                     bot->createMessage()
-                         ->channel_id(*msg.channel_id)
-                         ->content(content.str())
-                         ->run();
-                 }));
+    bot->respond("about", [&bot](dpp::Message msg) {
+        std::ostringstream content;
+        content << "Sure thing, "
+                << *(msg.member->nick ? msg.author->username : msg.member->nick)
+                << "!\n"
+                << "I'm a simple bot meant to demonstrate the "
+                   "Discord++ library.\n"
+                << "You can learn more about Discord++ at "
+                   "https://discord.gg/VHAyrvspCx";
+        bot->createMessage()
+            ->channel_id(*msg.channel_id)
+            ->content(content.str())
+            ->run();
+    });
 
-    bot->respond("lookatthis",
-                 dpp::objectify<dpp::Message>([&bot](dpp::Message msg) {
-                     std::ifstream ifs("image.jpg", std::ios::binary);
-                     if (!ifs) {
-                         std::cerr << "Couldn't load file 'image.jpg'!\n";
-                         return;
-                     }
-                     ifs.seekg(0, std::ios::end);
-                     std::ifstream::pos_type fileSize = ifs.tellg();
-                     ifs.seekg(0, std::ios::beg);
-                     auto file = std::make_shared<std::string>(fileSize, '\0');
-                     ifs.read(file->data(), fileSize);
+    bot->respond("lookatthis", [&bot](dpp::Message msg) {
+        std::ifstream ifs("image.jpg", std::ios::binary);
+        if (!ifs) {
+            std::cerr << "Couldn't load file 'image.jpg'!\n";
+            return;
+        }
+        ifs.seekg(0, std::ios::end);
+        std::ifstream::pos_type fileSize = ifs.tellg();
+        ifs.seekg(0, std::ios::beg);
+        auto file = std::make_shared<std::string>(fileSize, '\0');
+        ifs.read(file->data(), fileSize);
 
-                     bot->createMessage()
-                         ->channel_id(*msg.channel_id)
-                         ->content("Look at this photograph")
-                         ->filename("image.jpg")
-                         ->filetype("image/jpg")
-                         ->file(file)
-                         ->run();
-                 }));
+        bot->createMessage()
+            ->channel_id(*msg.channel_id)
+            ->content("Look at this photograph")
+            ->filename("image.jpg")
+            ->filetype("image/jpg")
+            ->file(file)
+            ->run();
+    });
 
-    bot->respond(
-        "channelinfo", dpp::objectify<dpp::Message>([&bot](dpp::Message msg) {
-            bot->getChannel()
-                ->channel_id(*msg.channel_id)
-                ->onRead([&bot, msg](bool error, json res) {
-                    bot->createMessage()
-                        ->channel_id(*msg.channel_id)
-                        ->content("```json\n" + res["body"].dump(4) + "\n```")
-                        ->run();
+    bot->respond("channelinfo", [&bot](dpp::Message msg) {
+        bot->getChannel()
+            ->channel_id(*msg.channel_id)
+            ->onRead([&bot, msg](bool error, json res) {
+                bot->createMessage()
+                    ->channel_id(*msg.channel_id)
+                    ->content("```json\n" + res["body"].dump(4) + "\n```")
+                    ->run();
+            })
+            ->run();
+    });
+
+    bot->respond("registerslash", [&bot, &self](dpp::Message msg) {
+        if (*msg.author->id == 106615803402547200) {
+            bot->createGuildApplicationCommand()
+                ->application_id(*self.id)
+                ->guild_id(*msg.guild_id)
+                ->name("echo")
+                ->description("Echoes what you say")
+                ->options({dpp::ApplicationCommandOption(
+                    dpp::ApplicationCommandOptionType::STRING,
+                    std::string("message"), "The message to echo", true)})
+                ->command_type(dpp::ApplicationCommandType::CHAT_INPUT)
+                ->onRead([](bool error, json res) {
+                    std::cout << res.dump(4) << std::endl;
                 })
                 ->run();
-        }));
-
-    bot->respond("registerslash",
-                 dpp::objectify<dpp::Message>([&bot, &self](dpp::Message msg) {
-                     if (*msg.author->id == 106615803402547200) {
-                         bot->createGuildApplicationCommand()
-                             ->application_id(*self.id)
-                             ->guild_id(*msg.guild_id)
-                             ->name("echo")
-                             ->description("Echoes what you say")
-                             ->options({{{"type", 3},
-                                         {"name", "message"},
-                                         {"description", "The message to echo"},
-                                         {"required", true}}})
-                             ->command_type(
-                                 dpp::ApplicationCommandType::CHAT_INPUT)
-                             ->onRead([](bool error, json res) {
-                                 std::cout << res.dump(4) << std::endl;
-                             })
-                             ->run();
-                     }
-                 }));
+        }
+    });
 
     bot->interactionHandlers.insert(
-        {881674285683470376,
-         dpp::objectify<dpp::Interaction>([&bot](dpp::Interaction msg) {
+        {881674285683470376, [&bot](dpp::Interaction msg) {
              bot->createResponse()
                  ->interaction_id(*msg.id)
                  ->interaction_token(*msg.token)
@@ -144,13 +135,12 @@ int main() {
                      dpp::InteractionCallbackType::CHANNEL_MESSAGE_WITH_SOURCE)
                  ->data({{"content", *msg.data->options->at(0).value}})
                  ->run();
-         })});
+         }});
 
     // Create handler for the MESSAGE_CREATE payload, this receives all messages
     // sent that the bot can see.
     bot->handlers.insert(
-        {"MESSAGE_CREATE",
-         dpp::objectify<dpp::Message>([&bot, &self](const dpp::Message msg) {
+        {"MESSAGE_CREATE", [&bot, &self](const dpp::Message msg) {
              // Ignore messages from other bots
              if (msg.webhook_id || (msg.author->bot && *msg.author->bot)) {
                  return;
@@ -194,7 +184,7 @@ int main() {
                             {"afk", false},
                             {"since", "null"}});
              }
-         })});
+         }});
 
     // Create Asio context, this handles async stuff.
     auto aioc = std::make_shared<asio::io_context>();
@@ -204,8 +194,6 @@ int main() {
 
     // Run the bot!
     bot->run();
-
-    dpp::Message m;
 
     return 0;
 }

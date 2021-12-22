@@ -154,7 +154,7 @@ int main() {
              // Scan through mentions in the message for self
              bool mentioned = false;
              for (const json &mention : msg["mentions"]) {
-                 mentioned = mentioned or mention["id"] == self["id"];
+                 mentioned = mentioned || mention["id"] == self["id"];
              }
              if (mentioned) {
                  // Identify and remove mentions of self from the message

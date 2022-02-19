@@ -10,9 +10,6 @@
 [submodule "lib/websocket-simpleweb"]
 	path = lib/websocket-simpleweb
 	url = https://github.com/DiscordPP/websocket-simpleweb.git
-[submodule "lib/plugin-endpoints"]
-	path = lib/plugin-endpoints
-	url = https://github.com/DiscordPP/plugin-endpoints.git
 [submodule "lib/rest-simpleweb"]
 	path = lib/rest-simpleweb
 	url = https://github.com/DiscordPP/rest-simpleweb.git
@@ -20,5 +17,6 @@
 	path = lib/plugin-interactionhandler
 	url = https://github.com/DiscordPP/plugin-interactionhandler.git
 [submodule "lib/discordpp"]
-	path = lib/discordpp
 	url = https://github.com/DiscordPP/discordpp.git
+[submodule "lib/plugin-endpoints"]
+	url = https://github.com/DiscordPP/plugin-endpoints.git

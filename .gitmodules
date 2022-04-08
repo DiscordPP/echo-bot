@@ -17,6 +17,8 @@
 	path = lib/plugin-interactionhandler
 	url = https://github.com/DiscordPP/plugin-interactionhandler.git
 [submodule "lib/discordpp"]
+	path = lib/discordpp
 	url = https://github.com/DiscordPP/discordpp.git
 [submodule "lib/plugin-endpoints"]
-	url = https://github.com/DiscordPP/plugin-endpoints.git
+	path = lib/plugin-endpoints
+	url = https://github.com/Hirrolot/plugin-endpoints.git

@@ -52,32 +52,30 @@ int main() {
     the future.
      * The `self` object contains all information about the 'bot' user.
     /*/
-    json self;
+    dpp::User self;
     bot->handlers.insert(
-        {"READY", [&self](json data) { self = data["user"]; }});
+        {"READY", [&self](dpp::Ready ready) { self = *ready.user; }});
 
     bot->prefix = "~";
 
     bot->respond("help", "Mention me and I'll echo your message back!");
 
-    bot->respond("about", [&bot](json msg) {
+    bot->respond("about", [&bot](dpp::Message msg) {
         std::ostringstream content;
-        content
-            << "Sure thing, "
-            << (msg["member"]["nick"].is_null()
-                    ? msg["author"]["username"].get<std::string>()
-                    : msg["member"]["nick"].get<std::string>())
-            << "!\n"
-            << "I'm a simple bot meant to demonstrate the Discord++ library.\n"
-            << "You can learn more about Discord++ at "
-               "https://discord.gg/VHAyrvspCx";
+        content << "Sure thing, "
+                << *(msg.member->nick ? msg.author->username : msg.member->nick)
+                << "!\n"
+                << "I'm a simple bot meant to demonstrate the "
+                   "Discord++ library.\n"
+                << "You can learn more about Discord++ at "
+                   "https://discord.gg/VHAyrvspCx";
         bot->createMessage()
-            ->channel_id(msg["channel_id"].get<dpp::Snowflake>())
+            ->channel_id(*msg.channel_id)
             ->content(content.str())
             ->run();
     });
 
-    bot->respond("lookatthis", [&bot](json msg) {
+    bot->respond("lookatthis", [&bot](dpp::Message msg) {
         std::ifstream ifs("image.jpg", std::ios::binary);
         if (!ifs) {
             std::cerr << "Couldn't load file 'image.jpg'!\n";
@@ -90,7 +88,7 @@ int main() {
         ifs.read(file->data(), fileSize);
 
         bot->createMessage()
-            ->channel_id(msg["channel_id"].get<dpp::Snowflake>())
+            ->channel_id(*msg.channel_id)
             ->content("Look at this photograph")
             ->filename("image.jpg")
             ->filetype("image/jpg")
@@ -98,29 +96,28 @@ int main() {
             ->run();
     });
 
-    bot->respond("channelinfo", [&bot](json msg) {
+    bot->respond("channelinfo", [&bot](dpp::Message msg) {
         bot->getChannel()
-            ->channel_id(msg["channel_id"].get<dpp::Snowflake>())
+            ->channel_id(*msg.channel_id)
             ->onRead([&bot, msg](bool error, json res) {
                 bot->createMessage()
-                    ->channel_id(msg["channel_id"].get<dpp::Snowflake>())
+                    ->channel_id(*msg.channel_id)
                     ->content("```json\n" + res["body"].dump(4) + "\n```")
                     ->run();
             })
             ->run();
     });
 
-    bot->respond("registerslash", [&bot, &self](json msg) {
-        if (msg["author"]["id"].get<std::string>() == "106615803402547200") {
+    bot->respond("registerslash", [&bot, &self](dpp::Message msg) {
+        if (*msg.author->id == 106615803402547200) {
             bot->createGuildApplicationCommand()
-                ->application_id(self["id"].get<dpp::Snowflake>())
-                ->guild_id(msg["guild_id"].get<dpp::Snowflake>())
+                ->application_id(*self.id)
+                ->guild_id(*msg.guild_id)
                 ->name("echo")
                 ->description("Echoes what you say")
-                ->options({{{"type", 3},
-                            {"name", "message"},
-                            {"description", "The message to echo"},
-                            {"required", true}}})
+                ->options({dpp::ApplicationCommandOption(
+                    dpp::ApplicationCommandOptionType::STRING,
+                    std::string("message"), "The message to echo", true)})
                 ->command_type(dpp::ApplicationCommandType::CHAT_INPUT)
                 ->onRead([](bool error, json res) {
                     std::cout << res.dump(4) << std::endl;
@@ -130,57 +127,53 @@ int main() {
     });
 
     bot->interactionHandlers.insert(
-        {881674285683470376, [&bot, &self](json msg) {
+        {881674285683470376, [&bot](dpp::Interaction msg) {
              bot->createResponse()
-                 ->interaction_id(msg["id"].get<dpp::Snowflake>())
-                 ->interaction_token(msg["token"].get<std::string>())
+                 ->interaction_id(*msg.id)
+                 ->interaction_token(*msg.token)
                  ->interaction_type(
                      dpp::InteractionCallbackType::CHANNEL_MESSAGE_WITH_SOURCE)
-                 ->data({{"content", msg["data"]["options"][0]["value"]}})
+                 ->data({{"content", *msg.data->options->at(0).value}})
                  ->run();
          }});
 
     // Create handler for the MESSAGE_CREATE payload, this receives all messages
     // sent that the bot can see.
     bot->handlers.insert(
-        {"MESSAGE_CREATE", [&bot, &self](json msg) {
+        {"MESSAGE_CREATE", [&bot, &self](const dpp::Message msg) {
              // Ignore messages from other bots
-             if (msg.contains("webhook_id") ||
-                 (msg["author"].contains("bot") &&
-                  msg["author"]["bot"].get<bool>())) {
+             if (msg.webhook_id || (msg.author->bot && *msg.author->bot)) {
                  return;
              }
 
              // Scan through mentions in the message for self
              bool mentioned = false;
-             for (const json &mention : msg["mentions"]) {
-                 mentioned = mentioned || mention["id"] == self["id"];
+             for (const dpp::User &mention : *msg.mentions) {
+                 mentioned = mentioned || (*mention.id == *self.id);
              }
              if (mentioned) {
                  // Identify and remove mentions of self from the message
-                 std::string content = msg["content"].get<std::string>();
+                 std::string content = *msg.content;
                  unsigned int oldlength, length = content.length();
                  do {
                      oldlength = length;
                      content = std::regex_replace(
                          content,
-                         std::regex(R"(<@!?)" + self["id"].get<std::string>() +
+                         std::regex(R"(<@!?)" + std::to_string(*self.id) +
                                     R"(> ?)"),
                          "");
                      length = content.length();
                  } while (oldlength > length);
 
                  // Get the target user's display name
-                 std::string name =
-                     (msg["member"]["nick"].is_null()
-                          ? msg["author"]["username"].get<std::string>()
-                          : msg["member"]["nick"].get<std::string>());
+                 std::string name = *(msg.member->nick ? msg.member->nick
+                                                       : msg.author->username);
 
                  std::cout << "Echoing " << name << '\n';
 
                  // Echo the created message
                  bot->createMessage()
-                     ->channel_id(msg["channel_id"].get<dpp::Snowflake>())
+                     ->channel_id(*msg.channel_id)
                      ->content(content)
                      ->run();
 

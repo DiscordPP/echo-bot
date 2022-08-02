@@ -25,8 +25,8 @@
 #endif
 
 #include <discordpp/bot.hh>
-#include <discordpp/plugin-endpoints.hh>
 #include <discordpp/plugin-interactionhandler.hh>
+#include <discordpp/plugin-native.hh>
 #include <discordpp/plugin-overload.hh>
 #include <discordpp/plugin-ratelimit.hh>
 #include <discordpp/plugin-responder.hh>

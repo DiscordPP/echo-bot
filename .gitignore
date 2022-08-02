@@ -1,6 +1,8 @@
 build/
 .floo
 token.dat
+cmake-build-debug-*
+scratch.txt
 
 # Prerequisites
 *.d

@@ -14,9 +14,7 @@ add_subdirectory(lib/plugin-responder)
 add_subdirectory(lib/plugin-interactionhandler)
 add_subdirectory(lib/plugin-ratelimit)
 
-list(JOIN ALL_DISCORDPP_PLUGINS , ALL_DISCORDPP_PLUGINS_JOINED)
-add_compile_definitions(ALL_DISCORDPP_PLUGINS=${ALL_DISCORDPP_PLUGINS_JOINED})
-
+CREATE_DISCORDPP_DEFINITIONS()
 CREATE_DISCORDPP_INCLUDE()
 
 set(SOURCE_FILES main.cc extern.cc)
@@ -25,17 +23,17 @@ target_precompile_headers(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include.h
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 
-if (${DISCORDPP_USE_BOOST})
+if(${DISCORDPP_USE_BOOST})
     find_package(Boost 1.71.0 REQUIRED system date_time)
-endif ()
+endif()
 find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
 
-if (WIN32)
+if(WIN32)
     add_definitions(-D_WIN32_WINNT=0x0601) # Windows 7
-endif ()
+endif()
 
-if (MSVC)
+if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /wd4250 /wd4244 /Zc:preprocessor")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /bigobj")
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -43,9 +41,6 @@ else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
     #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -fno-omit-frame-pointer")
 endif()
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -fno-omit-frame-pointer")
 
 TARGET_LINK_LIBRARIES(
         ${PROJECT_NAME}

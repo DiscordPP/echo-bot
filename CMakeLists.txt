@@ -17,6 +17,8 @@ add_subdirectory(lib/plugin-ratelimit)
 list(JOIN ALL_DISCORDPP_PLUGINS , ALL_DISCORDPP_PLUGINS_JOINED)
 add_compile_definitions(ALL_DISCORDPP_PLUGINS=${ALL_DISCORDPP_PLUGINS_JOINED})
 
+CREATE_DISCORDPP_INCLUDE()
+
 set(SOURCE_FILES main.cc extern.cc)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_precompile_headers(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include.hh)
@@ -51,6 +53,11 @@ TARGET_LINK_LIBRARIES(
         Threads::Threads
         ${OPENSSL_LIBRARIES}
         ${ALL_DISCORDPP_LIBRARIES}
+)
+
+TARGET_INCLUDE_DIRECTORIES(
+        ${PROJECT_NAME} PUBLIC
+        ${DISCORDPP_INCLUDE_GENERATED}
 )
 
 function(SYNC_FILE FILE)

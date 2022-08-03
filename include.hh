@@ -24,16 +24,7 @@
 
 #endif
 
-#include <discordpp/bot.hh>
-#include <discordpp/plugin-interactionhandler.hh>
-#include <discordpp/plugin-native.hh>
-#include <discordpp/plugin-overload.hh>
-#include <discordpp/plugin-ratelimit.hh>
-#include <discordpp/plugin-responder.hh>
-#include <discordpp/rest-simpleweb.hh>
-#include <discordpp/websocket-simpleweb.hh>
-
-// Put more D++ plugin `include`s here
+#include <discordpp.hh>
 
 #ifndef ECHO_EXTERN
 

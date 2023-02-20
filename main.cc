@@ -54,13 +54,13 @@ int main() {
     /*/
     dpp::User self;
     bot->handlers.insert(
-        {"READY", [&self](dpp::Ready ready) { self = *ready.user; }});
+        {"READY", [&self](dpp::ReadyEvent ready) { self = *ready.user; }});
 
     bot->prefix = "~";
 
     bot->respond("help", "Mention me and I'll echo your message back!");
 
-    bot->respond("about", [&bot](dpp::Message msg) {
+    bot->respond("about", [&bot](dpp::MessageCreateEvent msg) {
         std::ostringstream content;
         content << "Sure thing, "
                 << *(msg.member->nick ? msg.author->username : msg.member->nick)
@@ -75,7 +75,7 @@ int main() {
             ->run();
     });
 
-    bot->respond("lookatthis", [&bot](dpp::Message msg) {
+    bot->respond("lookatthis", [&bot](dpp::MessageCreateEvent msg) {
         std::ifstream ifs("image.jpg", std::ios::binary);
         if (!ifs) {
             std::cerr << "Couldn't load file 'image.jpg'!\n";
@@ -96,7 +96,7 @@ int main() {
             ->run();
     });
 
-    bot->respond("channelinfo", [&bot](dpp::Message msg) {
+    bot->respond("channelinfo", [&bot](dpp::MessageCreateEvent msg) {
         bot->getChannel()
             ->channel_id(*msg.channel_id)
             ->onRead([&bot, msg](bool error, json res) {
@@ -108,7 +108,7 @@ int main() {
             ->run();
     });
 
-    bot->respond("registerslash", [&bot, &self](dpp::Message msg) {
+    bot->respond("registerslash", [&bot, &self](dpp::MessageCreateEvent msg) {
         if (*msg.author->id == 106615803402547200) {
             bot->createGuildApplicationCommand()
                 ->application_id(*self.id)
@@ -117,7 +117,8 @@ int main() {
                 ->description("Echoes what you say")
                 ->options({dpp::ApplicationCommandOption(
                     dpp::ApplicationCommandOptionType::STRING,
-                    std::string("message"), "The message to echo", true)})
+                    std::string("message"), dpp::omitted, "The message to echo",
+                    dpp::omitted, true)})
                 ->command_type(dpp::ApplicationCommandType::CHAT_INPUT)
                 ->onRead([](bool error, json res) {
                     std::cout << res.dump(4) << std::endl;
@@ -133,14 +134,17 @@ int main() {
                  ->interaction_token(*msg.token)
                  ->interaction_type(
                      dpp::InteractionCallbackType::CHANNEL_MESSAGE_WITH_SOURCE)
-                 ->data({{"content", *msg.data->options->at(0).value}})
+                 ->data({{
+                     "content",
+                     *std::get<dpp::ApplicationCommandData>(*msg.data).options->at(0).value
+                 }})
                  ->run();
          }});
 
     // Create handler for the MESSAGE_CREATE payload, this receives all messages
     // sent that the bot can see.
     bot->handlers.insert(
-        {"MESSAGE_CREATE", [&bot, &self](const dpp::Message msg) {
+        {"MESSAGE_CREATE", [&bot, &self](const dpp::MessageCreateEvent msg) {
              // Ignore messages from other bots
              if (msg.webhook_id || (msg.author->bot && *msg.author->bot)) {
                  return;

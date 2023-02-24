@@ -117,7 +117,7 @@ int main() {
                 ->description("Echoes what you say")
                 ->options({dpp::ApplicationCommandOption(
                     dpp::ApplicationCommandOptionType::STRING,
-                    std::string("message"), dpp::omitted, "The message to echo",
+                    std::string("message"), dpp::omitted, std::string("The message to echo"),
                     dpp::omitted, true)})
                 ->command_type(dpp::ApplicationCommandType::CHAT_INPUT)
                 ->onRead([](bool error, json res) {

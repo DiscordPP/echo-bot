@@ -3,7 +3,7 @@
 # Discord++ example bot, Echo<sup>Echo<sup>Echo</sup></sup>
 
 ## Community & Support <sup>Some incredibly nice people here!</sup>
-[Discord++ Discord Server](https://discord.gg/VHAyrvspCx)
+[Discord++ Discord Server](https://discord.gg/4stCdkDHw6)
 
 ## Usage
 
